@@ -1,0 +1,408 @@
+<title>Northfield Comfort Air</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Heating and air conditioning repair, installation and maintenance. Same-day service, upfront pricing, licensed and insured.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800&family=Public+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+/* Layout: sticky call bar, split hero with a thermostat readout, then service grid, offer, plans, reviews, area, quote form. */
+:root {
+  --bg: #f6f8fa;
+  --surface: #ffffff;
+  --ink: #14202b;
+  --muted: #55636f;
+  --line: #d9e0e6;
+  --cool: #1f5f8b;
+  --cool-soft: #e3eef6;
+  --heat: #c4501b;
+  --heat-soft: #fbe9df;
+  --on-accent: #ffffff;
+  --display: "Archivo", "Arial Narrow", system-ui, sans-serif;
+  --body: "Public Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+  --radius: 10px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0f161c; --surface: #16212a; --ink: #e8eef3; --muted: #9aa9b5; --line: #2a3843;
+    --cool: #6fb3e0; --cool-soft: #17303f; --heat: #f08a55; --heat-soft: #3a2218; --on-accent: #0f161c;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0f161c; --surface: #16212a; --ink: #e8eef3; --muted: #9aa9b5; --line: #2a3843;
+  --cool: #6fb3e0; --cool-soft: #17303f; --heat: #f08a55; --heat-soft: #3a2218; --on-accent: #0f161c;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 16px; line-height: 1.6; margin: 0; }
+h1, h2, h3 { font-family: var(--display); line-height: 1.1; text-wrap: balance; margin: 0; }
+p { margin: 0; }
+a { color: inherit; }
+:focus-visible { outline: 3px solid var(--heat); outline-offset: 2px; }
+
+.wrap { max-width: 1120px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+section { padding-block: 72px; }
+.eyebrow { font-family: var(--mono); font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--cool); }
+.section-head { display: grid; gap: 10px; max-width: 640px; margin-bottom: 36px; }
+.section-head h2 { font-size: clamp(28px, 4vw, 40px); font-weight: 800; }
+.section-head p { color: var(--muted); }
+
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; font-family: var(--display); font-weight: 700; font-size: 16px; padding: 14px 22px; border-radius: 8px; text-decoration: none; border: 2px solid transparent; cursor: pointer; }
+.btn-heat { background: var(--heat); color: var(--on-accent); }
+.btn-heat:hover { filter: brightness(1.08); }
+.btn-ghost { border-color: var(--ink); color: var(--ink); background: transparent; }
+.btn-ghost:hover { background: var(--ink); color: var(--bg); }
+
+/* Top bar */
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--surface); }
+header { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--surface); border-bottom: 1px solid var(--line); }
+.bar { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-block: 12px; }
+.logo { display: flex; align-items: center; gap: 10px; font-family: var(--display); font-weight: 800; font-size: 19px; text-decoration: none; }
+.logo-mark { width: 34px; height: 34px; border-radius: 8px; background: linear-gradient(135deg, var(--cool) 0 50%, var(--heat) 50% 100%); flex: none; }
+.bar nav { display: flex; gap: 22px; font-weight: 500; font-size: 15px; }
+.bar nav a { text-decoration: none; color: var(--muted); }
+.bar nav a:hover { color: var(--ink); }
+.bar-call { display: flex; align-items: center; gap: 14px; }
+.bar-call .phone { font-family: var(--display); font-weight: 700; font-size: 18px; text-decoration: none; white-space: nowrap; }
+.status { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: var(--muted); }
+.status::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: #2f9e5b; box-shadow: 0 0 0 3px color-mix(in srgb, #2f9e5b 25%, transparent); }
+
+/* Hero */
+.hero { padding-block: 64px 72px; }
+.hero-grid { display: grid; grid-template-columns: 1.25fr .9fr; gap: 48px; align-items: center; }
+.hero h1 { font-size: clamp(38px, 6vw, 64px); font-weight: 800; letter-spacing: -.01em; }
+.hero h1 .cool { color: var(--cool); }
+.hero h1 .heat { color: var(--heat); }
+.hero-copy { display: grid; gap: 22px; min-width: 0; }
+.hero-copy > p { font-size: 18px; color: var(--muted); max-width: 54ch; }
+.hero-ctas { display: flex; flex-wrap: wrap; gap: 12px; }
+.trust { display: flex; flex-wrap: wrap; gap: 10px 22px; font-size: 14px; color: var(--muted); padding-top: 6px; }
+.trust strong { color: var(--ink); }
+
+.dial { background: var(--surface); border: 1px solid var(--line); border-radius: 18px; padding: 28px; display: grid; gap: 20px; }
+.dial-top { display: flex; justify-content: space-between; align-items: center; }
+.dial-modes { display: inline-flex; border: 1px solid var(--line); border-radius: 999px; padding: 3px; }
+.dial-modes button { font: 600 13px var(--body); border: 0; background: transparent; color: var(--muted); padding: 6px 14px; border-radius: 999px; cursor: pointer; }
+.dial-modes button[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
+.readout { display: flex; align-items: flex-start; justify-content: center; font-family: var(--display); font-weight: 800; font-size: clamp(84px, 13vw, 128px); line-height: 1; font-variant-numeric: tabular-nums; color: var(--cool); transition: color .3s; }
+.readout sup { font-size: .32em; margin-top: .3em; }
+.dial[data-mode="heat"] .readout { color: var(--heat); }
+.dial-note { text-align: center; color: var(--muted); font-size: 14px; }
+.dial-specs { display: grid; grid-template-columns: repeat(3, 1fr); border-top: 1px solid var(--line); padding-top: 16px; text-align: center; }
+.dial-specs div { display: grid; gap: 2px; }
+.dial-specs span { font-family: var(--mono); font-size: 11px; letter-spacing: .1em; color: var(--muted); text-transform: uppercase; }
+.dial-specs b { font-family: var(--display); font-size: 20px; font-variant-numeric: tabular-nums; }
+
+/* Services */
+.services { background: var(--surface); border-block: 1px solid var(--line); }
+.svc-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
+.svc { background: var(--surface); padding: 28px; display: grid; gap: 10px; align-content: start; }
+.svc .tag { font-family: var(--mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; padding: 3px 8px; border-radius: 4px; justify-self: start; }
+.tag.cool { background: var(--cool-soft); color: var(--cool); }
+.tag.heat { background: var(--heat-soft); color: var(--heat); }
+.svc h3 { font-size: 21px; font-weight: 700; }
+.svc p { color: var(--muted); font-size: 15px; }
+
+/* Offer */
+.offer { display: grid; grid-template-columns: 1fr auto; gap: 28px; align-items: center; background: var(--heat-soft); border: 2px dashed var(--heat); border-radius: 14px; padding: 32px; }
+.offer h2 { font-size: clamp(26px, 3.6vw, 36px); font-weight: 800; }
+.offer p { color: var(--muted); margin-top: 8px; }
+.price { font-family: var(--display); font-weight: 800; font-size: 64px; color: var(--heat); line-height: 1; text-align: right; }
+.price small { display: block; font-family: var(--mono); font-size: 12px; font-weight: 500; color: var(--muted); letter-spacing: .08em; margin-top: 6px; }
+
+/* Plans */
+.plans { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+.plan { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 28px; display: grid; gap: 16px; align-content: start; }
+.plan.featured { border: 2px solid var(--cool); }
+.plan h3 { font-size: 22px; }
+.plan .amt { font-family: var(--display); font-weight: 800; font-size: 40px; font-variant-numeric: tabular-nums; }
+.plan .amt span { font-size: 15px; color: var(--muted); font-weight: 500; font-family: var(--body); }
+.plan ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; font-size: 15px; }
+.plan li { padding-left: 22px; position: relative; }
+.plan li::before { content: ""; position: absolute; left: 2px; top: .55em; width: 10px; height: 6px; border-left: 2px solid var(--cool); border-bottom: 2px solid var(--cool); transform: rotate(-45deg); }
+
+/* Reviews */
+.reviews-head { display: flex; justify-content: space-between; align-items: end; gap: 20px; flex-wrap: wrap; margin-bottom: 36px; }
+.rating { display: flex; align-items: center; gap: 12px; }
+.rating b { font-family: var(--display); font-size: 44px; font-weight: 800; }
+.stars { color: #e0a100; letter-spacing: 2px; font-size: 18px; }
+.rev-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+.rev { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 24px; display: grid; gap: 14px; align-content: start; }
+.rev p { font-size: 15px; }
+.rev footer { font-size: 13px; color: var(--muted); }
+.rev footer b { color: var(--ink); }
+
+/* Area + quote */
+.contact { background: var(--surface); border-top: 1px solid var(--line); }
+.contact-grid { display: grid; grid-template-columns: 1fr 1.1fr; gap: 48px; }
+.contact-info { display: grid; gap: 24px; align-content: start; min-width: 0; }
+.towns { display: flex; flex-wrap: wrap; gap: 8px; }
+.towns span { border: 1px solid var(--line); border-radius: 999px; padding: 4px 12px; font-size: 14px; }
+.hours { display: grid; grid-template-columns: auto 1fr; gap: 6px 20px; font-size: 15px; font-variant-numeric: tabular-nums; }
+.hours dt { color: var(--muted); }
+.hours dd { margin: 0; }
+form { display: grid; gap: 14px; background: var(--bg); border: 1px solid var(--line); border-radius: 14px; padding: 28px; min-width: 0; }
+form h3 { font-size: 24px; }
+.row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+label { display: grid; gap: 6px; font-size: 14px; font-weight: 600; }
+input, select, textarea { font: 16px var(--body); color: var(--ink); background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 11px 12px; width: 100%; }
+textarea { min-height: 90px; resize: vertical; }
+.form-note { font-size: 13px; color: var(--muted); }
+.form-msg { font-weight: 600; color: var(--cool); }
+
+.site-foot { padding-block: 32px; font-size: 14px; color: var(--muted); }
+.foot-row { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; }
+
+/* Mobile call bar */
+.callbar { display: none; }
+
+@media (max-width: 900px) {
+  .hero-grid, .contact-grid { grid-template-columns: 1fr; }
+  .svc-grid, .plans, .rev-grid { grid-template-columns: 1fr 1fr; }
+  .bar nav { display: none; }
+}
+@media (max-width: 620px) {
+  section { padding-block: 52px; }
+  .svc-grid, .plans, .rev-grid, .row { grid-template-columns: 1fr; }
+  .offer { grid-template-columns: 1fr; }
+  .price { text-align: left; }
+  .bar-call .status, .bar-call .phone { display: none; }
+  .callbar { display: flex; position: fixed; left: 0; right: 0; bottom: 0; z-index: 6; gap: 10px; background: var(--surface); border-top: 1px solid var(--line);
+    padding: 10px max(16px, env(safe-area-inset-right, 0px)) calc(10px + env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px)); }
+  .callbar .btn { flex: 1; padding: 12px; }
+  .site-foot { padding-bottom: 96px; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+
+<header>
+  <div class="wrap bar">
+    <a class="logo" href="#top"><span class="logo-mark" aria-hidden="true"></span>Northfield Comfort Air</a>
+    <nav aria-label="Main">
+      <a href="#services">Services</a>
+      <a href="#plans">Maintenance plans</a>
+      <a href="#reviews">Reviews</a>
+      <a href="#quote">Service area</a>
+    </nav>
+    <div class="bar-call">
+      <span class="status">Techs available today</span>
+      <a class="phone" href="tel:+15555550142">(555) 555-0142</a>
+      <a class="btn btn-heat" href="#quote">Book service</a>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div class="hero-copy">
+        <span class="eyebrow">Heating &amp; cooling · Same-day service</span>
+        <h1>No <span class="cool">AC</span>? No <span class="heat">heat</span>? A tech at your door today.</h1>
+        <p>Family-owned since 2006. Upfront flat-rate pricing before any work starts, and every repair is backed by a 1-year parts and labor guarantee.</p>
+        <div class="hero-ctas">
+          <a class="btn btn-heat" href="tel:+15555550142">Call (555) 555-0142</a>
+          <a class="btn btn-ghost" href="#quote">Request a free estimate</a>
+        </div>
+        <div class="trust">
+          <span><strong>4.9★</strong> from 612 Google reviews</span>
+          <span><strong>Lic. #HVAC-04417</strong> · Insured</span>
+          <span><strong>24/7</strong> emergency line</span>
+        </div>
+      </div>
+
+      <div class="dial" id="dial" data-mode="cool">
+        <div class="dial-top">
+          <span class="eyebrow">Your home, fixed</span>
+          <div class="dial-modes" role="group" aria-label="Mode">
+            <button type="button" id="mode-cool" aria-pressed="true">Cool</button>
+            <button type="button" id="mode-heat" aria-pressed="false">Heat</button>
+          </div>
+        </div>
+        <div class="readout" aria-live="polite"><span id="temp">72</span><sup>°F</sup></div>
+        <p class="dial-note" id="dial-note">Central AC, heat pumps and ductless mini-splits</p>
+        <div class="dial-specs">
+          <div><span>Avg. arrival</span><b>2.5 hr</b></div>
+          <div><span>Diagnostic</span><b>$79</b></div>
+          <div><span>Warranty</span><b>1 yr</b></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="services" id="services">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">What we fix and install</span>
+        <h2>Every brand, every system, one call</h2>
+        <p>Carrier, Trane, Lennox, Goodman, Rheem and more. Trucks are stocked with common parts, so most repairs are done on the first visit.</p>
+      </div>
+      <div class="svc-grid">
+        <div class="svc"><span class="tag cool">Cooling</span><h3>AC repair</h3><p>Warm air, frozen coils, short cycling, refrigerant leaks. Diagnosed and quoted on the spot.</p></div>
+        <div class="svc"><span class="tag cool">Cooling</span><h3>AC replacement</h3><p>Properly sized systems (load calc, not guesswork) with 16–20 SEER2 options and rebate paperwork handled.</p></div>
+        <div class="svc"><span class="tag heat">Heating</span><h3>Furnace repair</h3><p>No heat, igniter and flame sensor failures, blower issues. Gas and electric furnaces.</p></div>
+        <div class="svc"><span class="tag heat">Heating</span><h3>Heat pumps</h3><p>Install and repair of cold-climate heat pumps. We help you claim federal tax credits.</p></div>
+        <div class="svc"><span class="tag cool">Air quality</span><h3>Ductless mini-splits</h3><p>Garages, additions and rooms the ducts never reached. Quiet, efficient, zoned.</p></div>
+        <div class="svc"><span class="tag heat">Air quality</span><h3>Ducts &amp; IAQ</h3><p>Duct sealing, whole-home humidifiers, UV lights and MERV 13 filtration.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="offer">
+        <div>
+          <span class="eyebrow">Seasonal offer</span>
+          <h2>Furnace safety check &amp; tune-up</h2>
+          <p>21-point inspection, carbon monoxide test, burner cleaning and filter check. Book before the first cold snap.</p>
+        </div>
+        <div class="price">$89<small>REG. $149</small></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="plans" style="padding-top: 0;">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Comfort club</span>
+        <h2>Maintenance plans that pay for themselves</h2>
+        <p>Two tune-ups a year catch small problems before they become a $900 emergency call.</p>
+      </div>
+      <div class="plans">
+        <div class="plan">
+          <h3>Basic</h3>
+          <div class="amt">$12<span> /month</span></div>
+          <ul><li>1 tune-up per year</li><li>10% off repairs</li><li>No overtime fees</li></ul>
+          <a class="btn btn-ghost" href="#quote">Choose Basic</a>
+        </div>
+        <div class="plan featured">
+          <h3>Comfort</h3>
+          <div class="amt">$19<span> /month</span></div>
+          <ul><li>Heating + cooling tune-ups</li><li>15% off repairs</li><li>Priority same-day booking</li><li>No overtime fees</li></ul>
+          <a class="btn btn-heat" href="#quote">Choose Comfort</a>
+        </div>
+        <div class="plan">
+          <h3>Total</h3>
+          <div class="amt">$29<span> /month</span></div>
+          <ul><li>Everything in Comfort</li><li>2 filter deliveries per year</li><li>20% off repairs</li><li>$500 off a new system</li></ul>
+          <a class="btn btn-ghost" href="#quote">Choose Total</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="reviews" style="padding-top: 0;">
+    <div class="wrap">
+      <div class="reviews-head">
+        <div class="section-head" style="margin: 0;">
+          <span class="eyebrow">Reviews</span>
+          <h2>What neighbors say</h2>
+        </div>
+        <div class="rating"><b>4.9</b><div><div class="stars" aria-label="4.9 out of 5 stars">★★★★★</div><span class="form-note">612 Google reviews</span></div></div>
+      </div>
+      <div class="rev-grid">
+        <article class="rev"><div class="stars" aria-hidden="true">★★★★★</div><p>“Furnace died on a Sunday night. Marcus was here by 9am Monday, had the igniter swapped in 40 minutes, and the price matched the quote exactly.”</p><footer><b>Dana R.</b> · Furnace repair</footer></article>
+        <article class="rev"><div class="stars" aria-hidden="true">★★★★★</div><p>“Got three quotes for a new AC. They were the only ones who measured the house and explained why we needed 3 tons, not 4. Bills dropped noticeably.”</p><footer><b>Luis M.</b> · AC replacement</footer></article>
+        <article class="rev"><div class="stars" aria-hidden="true">★★★★★</div><p>“On the Comfort plan for three years. They text before arriving, wear shoe covers, and caught a cracked heat exchanger early.”</p><footer><b>Priya K.</b> · Maintenance plan</footer></article>
+      </div>
+    </div>
+  </section>
+
+  <section class="contact" id="quote">
+    <div class="wrap contact-grid">
+      <div class="contact-info">
+        <div class="section-head" style="margin: 0;">
+          <span class="eyebrow">Service area</span>
+          <h2>Local techs, not a call center</h2>
+          <p>We cover a 30-mile radius from our shop. If you’re not sure, call and ask.</p>
+        </div>
+        <div class="towns"><span>Northfield</span><span>Westbrook</span><span>Cedar Hills</span><span>Lakeview</span><span>Oak Ridge</span><span>Millbrook</span><span>Fairhaven</span></div>
+        <dl class="hours">
+          <dt>Mon–Fri</dt><dd>7:00am – 7:00pm</dd>
+          <dt>Saturday</dt><dd>8:00am – 4:00pm</dd>
+          <dt>Emergency</dt><dd>24/7 at (555) 555-0142</dd>
+        </dl>
+      </div>
+
+      <form id="quote-form" name="quote" method="POST" data-netlify="true" netlify-honeypot="company">
+        <input type="hidden" name="form-name" value="quote">
+        <p hidden><label>Leave blank <input name="company" id="f-company"></label></p>
+        <h3>Request service or an estimate</h3>
+        <div class="row">
+          <label for="f-name">Name<input id="f-name" name="name" autocomplete="name" required></label>
+          <label for="f-phone">Phone<input id="f-phone" name="phone" type="tel" autocomplete="tel" required></label>
+        </div>
+        <div class="row">
+          <label for="f-zip">ZIP code<input id="f-zip" name="zip" inputmode="numeric" autocomplete="postal-code" required></label>
+          <label for="f-type">What do you need?
+            <select id="f-type" name="type">
+              <option>AC repair</option><option>Heating repair</option><option>New system estimate</option><option>Tune-up / maintenance plan</option><option>Other</option>
+            </select>
+          </label>
+        </div>
+        <label for="f-msg">Describe the problem (optional)<textarea id="f-msg" name="message" placeholder="e.g. Upstairs is blowing warm air, unit is about 12 years old"></textarea></label>
+        <button class="btn btn-heat" type="submit">Send request</button>
+        <p class="form-note" id="form-msg" aria-live="polite">We call back within 1 business hour. No spam, ever.</p>
+      </form>
+    </div>
+  </section>
+</main>
+
+<footer class="site-foot">
+  <div class="wrap foot-row">
+    <span>© Northfield Comfort Air · Licensed &amp; insured · Lic. #HVAC-04417</span>
+    <span>Financing available on new systems, subject to credit approval</span>
+  </div>
+</footer>
+
+<div class="callbar">
+  <a class="btn btn-heat" href="tel:+15555550142">Call now</a>
+  <a class="btn btn-ghost" href="#quote">Get estimate</a>
+</div>
+
+<script>
+(function () {
+  var dial = document.getElementById('dial');
+  var temp = document.getElementById('temp');
+  var note = document.getElementById('dial-note');
+  var cool = document.getElementById('mode-cool');
+  var heat = document.getElementById('mode-heat');
+  var timer;
+  function setMode(mode) {
+    dial.dataset.mode = mode;
+    cool.setAttribute('aria-pressed', mode === 'cool');
+    heat.setAttribute('aria-pressed', mode === 'heat');
+    note.textContent = mode === 'cool' ? 'Central AC, heat pumps and ductless mini-splits' : 'Gas and electric furnaces, boilers and heat pumps';
+    var target = mode === 'cool' ? 72 : 70;
+    var cur = parseInt(temp.textContent, 10);
+    clearInterval(timer);
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { temp.textContent = target; return; }
+    timer = setInterval(function () {
+      if (cur === target) { clearInterval(timer); return; }
+      cur += cur < target ? 1 : -1;
+      temp.textContent = cur;
+    }, 90);
+  }
+  cool.addEventListener('click', function () { setMode('cool'); });
+  heat.addEventListener('click', function () { setMode('heat'); });
+
+  var form = document.getElementById('quote-form');
+  var msg = document.getElementById('form-msg');
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var body = new URLSearchParams(new FormData(form)).toString();
+    fetch('/', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: body })
+      .then(function (r) {
+        if (!r.ok) throw new Error();
+        msg.textContent = 'Request received. We will call you within 1 business hour.';
+        msg.className = 'form-msg';
+        form.reset();
+      })
+      .catch(function () {
+        msg.textContent = 'Demo preview: on the live site this request goes straight to the owner’s inbox and phone.';
+        msg.className = 'form-msg';
+      });
+  });
+})();
+</script>
