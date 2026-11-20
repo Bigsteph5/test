@@ -18,6 +18,19 @@ Collected 2026-11-20 from web search, directory listings and each company's own 
 - Arctic Air: BBB shows (816) 436-1000; another listing shows 1-816-587-4000. Founding year conflicts (1975 vs 2010), so the demo omits it.
 - Steve's: the 517-review count comes from an aggregator (ServiceAgent). Check Google before quoting it. The demo shows "4.9★ on Google" only.
 
+## Live preview links (Netlify, your account)
+| Business | Preview |
+|---|---|
+| Steve's Heating & Cooling | https://kc-preview-steves.netlify.app |
+| Gunn Heating & Cooling | https://kc-preview-gunn.netlify.app |
+| Arctic Air Heating & Cooling | https://kc-preview-arctic-air.netlify.app |
+| Comfort Kings Heating and Cooling | https://kc-preview-comfort-kings.netlify.app |
+| Cool Heat KC | https://kc-preview-cool-heat.netlify.app |
+
+Request forms are on (Netlify Forms). Submissions land in your Netlify dashboard under each project's Forms tab. Delete a project if the owner says no.
+
+Redeploy after edits: change `hvac-kc/leads/leads.json` → `python3 hvac-kc/leads/gen.py` → `hvac-kc/leads/build_dist.sh <folder>` → deploy that `dist/<folder>`.
+
 ## What each demo contains
 - Real name, phone, town and service area, plus facts from their own site or listings (see `source` in `hvac-kc/leads/leads.json`).
 - Reviews **only** where the company publishes them itself (Comfort Kings, Cool Heat KC). Steve's, Gunn and Arctic Air show a clearly marked placeholder. Paste 3 real Google reviews in before pitching, or tell the owner you'll add them.
