@@ -100,6 +100,107 @@
     "source": "Facts and reviews from comfortkings.squarespace.com (home, service areas, testimonials pages)."
   },
   {
+    "slug": "rs-contracting",
+    "name": "R&S Contracting LLC",
+    "short": "R&S",
+    "phone": "(816) 300-1561",
+    "phone2": "",
+    "email": "",
+    "city": "Kansas City",
+    "region": "MO",
+    "emergency": true,
+    "eyebrow": "HVAC · Refrigeration · Electrical · Plumbing — Kansas City &amp; the eastern metro",
+    "lede": "One call for heating, cooling, refrigeration, electrical and plumbing. 24/7 emergency service for homes and businesses across Kansas City, Independence, Lee's Summit and Blue Springs.",
+    "meta": [
+      "<b>5.0★</b> on Google",
+      "<b>24/7</b> emergency service",
+      "Residential &amp; commercial"
+    ],
+    "services": [
+      "AC repair",
+      "Furnace installation",
+      "AC &amp; furnace replacement",
+      "Commercial rooftop maintenance",
+      "Refrigeration",
+      "Electrical troubleshooting",
+      "Water heater installation",
+      "Renovations"
+    ],
+    "card4": {
+      "tag": "Commercial",
+      "title": "Rooftop units &amp; refrigeration",
+      "body": "Routine commercial HVAC maintenance and refrigeration service for rooftop units and large systems throughout Kansas City.",
+      "tags": [
+        "Rooftop units",
+        "Refrigeration",
+        "Maintenance"
+      ]
+    },
+    "facts": [
+      [
+        "5.0★",
+        "Google rating"
+      ],
+      [
+        "24/7",
+        "open every day"
+      ],
+      [
+        "4 trades",
+        "HVAC, refrigeration, electrical, plumbing"
+      ],
+      [
+        "13",
+        "metro towns served"
+      ]
+    ],
+    "reviews": [
+      {
+        "text": "R&S Contracting came out for an emergency HVAC call and did a great job. They showed up quickly, figured out the issue right away, and explained everything clearly. They were professional, easy to work with, and I never felt pressured into anything. I would definitely use them again and recommend them to others!",
+        "who": "Cheryl Sweet",
+        "src": "Google review · Emergency HVAC"
+      },
+      {
+        "text": "R&S Contracting replaced my AC and furnace. They were professional, thorough, and knowledgeable. Would definitely recommend if you're looking to update your AC/furnace!",
+        "who": "Mallory Allgier",
+        "src": "Google review · AC &amp; furnace replacement"
+      },
+      {
+        "text": "I called this company out for an issue with my HVAC unit. They were very professional, respectful, and had great communication throughout the whole process. Highly recommend!",
+        "who": "Preston Leach",
+        "src": "Google review · HVAC repair"
+      }
+    ],
+    "areaLede": "Serving Kansas City and the eastern and northern metro, for homes and businesses.",
+    "area1": {
+      "label": "MO",
+      "sub": "Jackson · Clay · Platte",
+      "towns": [
+        "Kansas City",
+        "Independence",
+        "Lee's Summit",
+        "Blue Springs",
+        "Grain Valley",
+        "Raytown",
+        "Liberty",
+        "Kearney",
+        "Smithville",
+        "Excelsior Springs",
+        "Parkville",
+        "Riverside"
+      ]
+    },
+    "area2": {
+      "label": "KS",
+      "sub": "Wyandotte County",
+      "towns": [
+        "Kansas City, KS"
+      ]
+    },
+    "hours": "Open 24 hours, 7 days",
+    "source": "Verified Google Business Profile (5.0 from 6 reviews, (816) 300-1561, open 24 hours, service-area list), fetched 2026-11-20. Uses Google's free business page; no company website found."
+  },
+  {
     "slug": "cool-heat-kc",
     "name": "Cool Heat KC",
     "short": "Cool Heat KC",
@@ -194,110 +295,6 @@
     "source": "Facts and reviews from coolheatkc.com home page."
   },
   {
-    "slug": "steves-heating-cooling",
-    "name": "Steve's Heating & Cooling",
-    "short": "Steve's",
-    "phone": "(816) 436-8475",
-    "phone2": "",
-    "email": "",
-    "street": "4252 NW Riverside St",
-    "city": "Riverside",
-    "region": "MO",
-    "zip": "64150",
-    "emergency": true,
-    "eyebrow": "Heating · Cooling · Air quality — Riverside &amp; the Northland since 1979",
-    "lede": "Locally owned and serving Kansas City since 1979. Furnace and air conditioning installation, service and repair, with fair pricing and techs customers ask for by name. Not part of a national home services company.",
-    "meta": [
-      "<b>Since 1979</b> locally owned",
-      "<b>24/7</b> emergency on-call",
-      "<b>American Standard</b> dealer"
-    ],
-    "services": [
-      "AC repair &amp; installation",
-      "Furnace repair &amp; installation",
-      "Heat pumps",
-      "Ductless mini-splits",
-      "Humidifiers &amp; dehumidifiers",
-      "Duct cleaning",
-      "Indoor air quality",
-      "Financing on approved credit"
-    ],
-    "card4": {
-      "tag": "Air quality",
-      "title": "Cleaner, healthier air",
-      "body": "Duct cleaning, air cleaners and purifiers, humidifiers and dehumidifiers for Kansas City homes.",
-      "tags": [
-        "Duct cleaning",
-        "Purifiers",
-        "Humidifiers"
-      ]
-    },
-    "facts": [
-      [
-        "1979",
-        "serving Kansas City since"
-      ],
-      [
-        "45+",
-        "years locally owned"
-      ],
-      [
-        "24/7",
-        "emergency on-call service"
-      ],
-      [
-        "Free",
-        "quotes on new equipment"
-      ]
-    ],
-    "reviews": [
-      {
-        "text": "The technician got here within an hour of calling. He was very nice and replaced the capacitor within and hour. It was a great experience and I will definitely use them again!!!",
-        "who": "Michelle M.",
-        "src": "Customer review"
-      },
-      {
-        "text": "This was a general service call. My HVAC stopped cooling and the condenser and evaporator coils froze. The technician showed up 15 minutes early and solved the issue within 2-3 minutes. Excellent mannerisms for customer service.",
-        "who": "Harry K.",
-        "src": "AC service"
-      },
-      {
-        "text": "Fast, effective, very polite. Worth every penny.",
-        "who": "Nancy",
-        "src": "Customer review"
-      }
-    ],
-    "areaLede": "Based in Riverside, serving the Northland and beyond on both sides of State Line.",
-    "area1": {
-      "label": "MO",
-      "sub": "Platte · Clay",
-      "towns": [
-        "Riverside",
-        "Parkville",
-        "Gladstone",
-        "Liberty",
-        "Kansas City",
-        "Weatherby Lake",
-        "Platte Woods",
-        "Lake Waukomis",
-        "Claycomo",
-        "Northmoor"
-      ]
-    },
-    "area2": {
-      "label": "KS",
-      "sub": "Johnson County",
-      "towns": [
-        "Overland Park",
-        "Lenexa",
-        "Shawnee",
-        "Prairie Village"
-      ]
-    },
-    "hours": "Mon–Fri 8–8 · Sat 8–5 · Sun 12–5 · 24/7 emergency on-call",
-    "source": "stevesheatingkc.com home page (facts, hours, service area, three customer reviews). HAS AN EXISTING WEBSITE: weak lead."
-  },
-  {
     "slug": "gunn-heating-cooling",
     "name": "Gunn Heating & Cooling",
     "short": "Gunn",
@@ -385,93 +382,5 @@
     },
     "hours": "Call for hours",
     "source": "Google Business Profile (verified, 5.0 from 113 reviews, (816) 551-9177), fetched 2026-11-20. Reviews copied from it. HomeAdvisor says no emergency service. No company website found."
-  },
-  {
-    "slug": "arctic-air-gladstone",
-    "name": "Arctic Air Heating & Cooling",
-    "short": "Arctic Air",
-    "phone": "(816) 436-1000",
-    "phone2": "",
-    "email": "",
-    "street": "6708 N Oak Trafficway",
-    "city": "Gladstone",
-    "region": "MO",
-    "zip": "64118",
-    "emergency": true,
-    "eyebrow": "Lennox Premier Dealer · Family owned since 1975 — Gladstone &amp; Kansas City",
-    "lede": "Family owned since 1975, on North Oak Trafficway in Gladstone. A 24/7 live assistance hotline, priority scheduling for seniors and people with medical needs, and expert installation, maintenance and repair across the metro.",
-    "meta": [
-      "<b>Since 1975</b> family owned",
-      "<b>4.8★</b> from 696 reviews",
-      "<b>24/7</b> live hotline"
-    ],
-    "services": [
-      "Lennox Premier Dealer",
-      "Furnace repair &amp; installation",
-      "AC repair &amp; installation",
-      "Maintenance",
-      "Air flow corrections",
-      "Priority service for seniors",
-      "Financing",
-      "24/7 live hotline"
-    ],
-    "card4": {
-      "tag": "Lennox",
-      "title": "Lennox Premier Dealer",
-      "body": "Lennox furnaces, air conditioners and heat pumps, installed and serviced by a Premier Dealer.",
-      "tags": [
-        "Furnaces",
-        "Central AC",
-        "Heat pumps"
-      ]
-    },
-    "facts": [
-      [
-        "1975",
-        "family owned since"
-      ],
-      [
-        "4.8★",
-        "from 696 reviews (Birdeye)"
-      ],
-      [
-        "24/7",
-        "live assistance hotline"
-      ],
-      [
-        "Lennox",
-        "Premier Dealer"
-      ]
-    ],
-    "reviews": [
-      {
-        "text": "Very pleased with the price and installation of a new AC and furnace. Prompt, professional, have used Arctic Air for decades and will continue.",
-        "who": "Kevin W.",
-        "src": "Review via Birdeye · AC &amp; furnace install"
-      }
-    ],
-    "areaLede": "Based in Gladstone, serving the Kansas City metro in Missouri and Kansas.",
-    "area1": {
-      "label": "MO",
-      "sub": "Clay · Platte",
-      "towns": [
-        "Gladstone",
-        "Kansas City North",
-        "North Kansas City",
-        "Liberty",
-        "Parkville",
-        "Riverside"
-      ]
-    },
-    "area2": {
-      "label": "KS",
-      "sub": "Call to confirm",
-      "towns": [
-        "Kansas City, KS",
-        "Johnson County"
-      ]
-    },
-    "hours": "24/7 live assistance hotline",
-    "source": "arcticairkc.com (since 1975, 24/7 hotline, phone confirmed (816) 436-1000), Lennox locator, Birdeye (4.8 from 696 reviews, one review). HAS AN EXISTING WEBSITE WITH ONLINE BOOKING: weak lead. Google reviews not reachable from here."
   }
 ]

@@ -10,8 +10,7 @@ Collected 2026-11-20 from web search, directory listings and each company's own 
 | 1 | **Gunn Heating & Cooling** | KC metro (BuildZoom lists Paola, KS) | (816) 551-9177 | **None found** | Verified Google profile: 5.0★ from 113 reviews, and no website. **Best lead.** | `gunn-heating-cooling` |
 | 2 | **Comfort Kings Heating and Cooling** | Overland Park, KS | (913) 277-9428 | comfortkings.squarespace.com | Their site lives on a default Squarespace address, has no request form and only ~475 words, and shows two phone numbers. They have 30+ years of history and strong reviews to feature. | `comfort-kings` |
 | 3 | **Cool Heat KC** | Shawnee, KS | (913) 333-0493 | coolheatkc.com (WordPress) | The live site shows leftover text "Marketing 2026-04-17T09:17:16+00:00" in the menu area and a "Facebbok" typo. The browser title is a 120-character keyword string. No request form. Veteran-owned, Mitsubishi Diamond Elite. | `cool-heat-kc` |
-| 4 | **Steve's Heating & Cooling** | Riverside, MO (4252 NW Riverside St) | (816) 436-8475 | **stevesheatingkc.com** (WordPress, solid) | ⚠️ Correction: they DO have a decent site: mobile-ready, 20+ service pages, promotions, financing, reviews, 24/7 on-call. No request form on the home page. **Weak lead.** Pitch only as a redesign. | `steves-heating-cooling` |
-| 5 | **Arctic Air Heating & Cooling** | Gladstone, MO (6708 N Oak Trafficway) | (816) 436-1000 (confirmed on their site) | **arcticairkc.com** (WordPress, online booking) | ⚠️ Correction: they DO have a site with an online booking widget, 24/7 hotline and "Family Owned Since 1975". It still says "49 years" (it's now 51), and its stat counters render as "0 %" / "K+" with no numbers in the page source. **Weak lead.** Pitch only as a redesign. (arcticairhc.com is an unrelated Texas company.) | `arctic-air-gladstone` |
+| 4 | **R&S Contracting LLC** | Kansas City + eastern/northern metro | (816) 300-1561 | **None** (uses Google's free business page) | Verified Google profile, 5.0★, open 24/7, HVAC + refrigeration + electrical + plumbing. Only 6 reviews: pitch the site as the way to grow. | `rs-contracting` |
 
 ⚠️ **Notes:**
 - Gunn: BuildZoom shows (816) 557-9177, but the verified Google profile shows (816) 551-9177, so use the Google number. HomeAdvisor says no emergency service, so the demo makes no 24/7 claim.
@@ -38,11 +37,10 @@ Collected 2026-11-20 from web search, directory listings and each company's own 
 ## Live preview links (Netlify, your account)
 | Business | Preview |
 |---|---|
-| Steve's Heating & Cooling | https://kc-preview-steves.netlify.app |
 | Gunn Heating & Cooling | https://kc-preview-gunn.netlify.app |
-| Arctic Air Heating & Cooling | https://kc-preview-arctic-air.netlify.app |
 | Comfort Kings Heating and Cooling | https://kc-preview-comfort-kings.netlify.app |
 | Cool Heat KC | https://kc-preview-cool-heat.netlify.app |
+| R&S Contracting | https://kc-preview-rs-contracting.netlify.app (**not deployed yet**: Netlify credits used up) |
 
 Request forms are on (Netlify Forms). Submissions land in your Netlify dashboard under each project's Forms tab. Delete a project if the owner says no.
 
@@ -76,3 +74,14 @@ Redeploy after edits: change `hvac-kc/leads/leads.json` → `python3 hvac-kc/lea
 
 ## Opener for Cool Heat KC
 > I was on your website and noticed the top of the page shows some leftover code text, "Marketing 2026-04-17…", and the Facebook link is spelled "Facebbok." Small things, but customers notice. I built a cleaner version with an online request form. Can I text you the link?
+
+## Retired: Steve's and Arctic Air
+Both have working websites (stevesheatingkc.com, arcticairkc.com). Their demo data is kept in `hvac-kc/leads/leads-retired.json`.
+**Their previews are still live** (kc-preview-steves, kc-preview-arctic-air), because Netlify blocked the takedown deploy (credits used up). Delete both projects in the Netlify dashboard: Project configuration → Delete project.
+
+## Replacement search (2026-11-20): what was checked
+Only one well-reviewed KC HVAC company verifiably has no website. Everyone else checked has one:
+Bellis H&C (bellis-hc.com), On the Spot (kansascityhvac.com), Eric Kjelshus Energy (ericsenergy.com), KC Prestige HVAC (kcprestigehvac.com), TJ's (tjshvac.com), Hometown Heroes (hometownheroeskc.com), HVAC Cowboys (site listed on Angi), Dad's (dadscoolair.com), McIntosh (mcintosh-hc.com).
+Not usable: Kelly CAN H&C (license shows expired, no reviews), Dave & Kelly's (no phone found), 24h H&C (no phone or reviews).
+
+**Fastest way to find more:** on your phone, search Google Maps for "furnace repair" or "HVAC" in a KC suburb, open each listing, and look for one with no **Website** button. Those listings show an "Add website" prompt to the owner, and they're your best leads.
