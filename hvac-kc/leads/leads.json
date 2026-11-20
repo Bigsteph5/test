@@ -206,8 +206,8 @@
     "short": "Cool Heat KC",
     "phone": "(913) 333-0493",
     "phone2": "(913) 660-5179",
-    "email": "",
-    "city": "Shawnee",
+    "email": "info@coolheatkc.com",
+    "city": "Bonner Springs",
     "region": "KS",
     "emergency": true,
     "eyebrow": "Mitsubishi Diamond Elite Contractor · Veteran-owned — Shawnee &amp; Overland Park",
@@ -301,15 +301,15 @@
     "phone": "(816) 551-9177",
     "phone2": "",
     "email": "",
-    "city": "Kansas City",
-    "region": "MO",
-    "emergency": false,
-    "eyebrow": "Heating · Cooling — locally owned, serving the Kansas City metro",
+    "city": "Paola",
+    "region": "KS",
+    "emergency": true,
+    "eyebrow": "Heating · Cooling · Refrigeration — Paola, Spring Hill &amp; the south metro",
     "lede": "A locally owned, family-operated heating and cooling company with a perfect 5-star Google rating. Honest diagnoses, fair prices and no pressure to buy extras.",
     "meta": [
       "<b>5.0★</b> from 113 Google reviews",
-      "<b>Family</b> operated",
-      "Locally owned"
+      "<b>24/7</b> emergency repair",
+      "<b>Family</b> operated"
     ],
     "services": [
       "Furnace repair",
@@ -363,24 +363,36 @@
         "src": "Google review · Full system install"
       }
     ],
-    "areaLede": "Serving the Kansas City metro on both sides of State Line.",
+    "areaLede": "Based in Paola and serving the south metro and beyond, on both sides of State Line.",
     "area1": {
       "label": "KS",
-      "sub": "Johnson · Wyandotte",
+      "sub": "Miami · Johnson · Wyandotte",
       "towns": [
-        "Kansas City, KS",
+        "Paola",
+        "Spring Hill",
+        "Louisburg",
+        "Olathe",
+        "Gardner",
+        "Overland Park",
         "Lenexa",
-        "Shawnee"
+        "Shawnee",
+        "Kansas City, KS"
       ]
     },
     "area2": {
       "label": "MO",
-      "sub": "Jackson County",
+      "sub": "Cass · Jackson",
       "towns": [
+        "Belton",
+        "Raymore",
+        "Harrisonville",
+        "Drexel",
+        "Lee's Summit",
+        "Blue Springs",
         "Kansas City"
       ]
     },
-    "hours": "Call for hours",
-    "source": "Google Business Profile (verified, 5.0 from 113 reviews, (816) 551-9177), fetched 2026-11-20. Reviews copied from it. HomeAdvisor says no emergency service. No company website found."
+    "hours": "Open 24 hours",
+    "source": "Google Business Profile (verified, 5.0 from 113 reviews, (816) 551-9177), fetched 2026-11-20. Reviews copied from it. HomeAdvisor says no emergency service. No company website found. Google profile also says open 24 hours with emergency repair; service area centered on Paola, Spring Hill, Drexel."
   }
 ]

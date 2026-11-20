@@ -8,7 +8,7 @@ Collected 2026-11-20 from web search, directory listings and each company's own 
 | # | Business | Area | Phone | Website today | Why they need you | Demo folder |
 |---|---|---|---|---|---|---|
 | 1 | **Gunn Heating & Cooling** | KC metro (BuildZoom lists Paola, KS) | (816) 551-9177 | **None found** | Verified Google profile: 5.0★ from 113 reviews, and no website. **Best lead.** | `gunn-heating-cooling` |
-| 2 | **Comfort Kings Heating and Cooling** | Overland Park, KS | (913) 277-9428 | comfortkings.squarespace.com | Their site lives on a default Squarespace address, has no request form and only ~475 words, and shows two phone numbers. They have 30+ years of history and strong reviews to feature. | `comfort-kings` |
+| 2 | **Comfort Kings Heating and Cooling** | Overland Park, KS | (913) 277-9428 | comfortkings.squarespace.com | Their site lives on a default Squarespace address, with only ~475 words on the home page and two phone numbers. (Correction: the Contact page does have a form.) They have 30+ years of history and strong reviews to feature. | `comfort-kings` |
 | 3 | **Cool Heat KC** | Shawnee, KS | (913) 333-0493 | coolheatkc.com (WordPress) | The live site shows leftover text "Marketing 2026-04-17T09:17:16+00:00" in the menu area and a "Facebbok" typo. The browser title is a 120-character keyword string. No request form. Veteran-owned, Mitsubishi Diamond Elite. | `cool-heat-kc` |
 | 4 | **R&S Contracting LLC** | Kansas City + eastern/northern metro | (816) 300-1561 | **None** (uses Google's free business page) | Verified Google profile, 5.0★, open 24/7, HVAC + refrigeration + electrical + plumbing. Only 6 reviews: pitch the site as the way to grow. | `rs-contracting` |
 
