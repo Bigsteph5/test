@@ -1,0 +1,1057 @@
+<title>Gunn Heating &amp; Cooling</title>
+<meta name="robots" content="noindex">
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Gunn Heating &amp; Cooling: heating and cooling in Kansas City, MO and the Kansas City area.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,300..800&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: the page is a thermostat. One setpoint (--t, 0 = cold, 1 = warm) tints every accent, video and readout below it. */
+:root {
+  color-scheme: dark;
+  --ink: #090c10;          /* ground: graphite biased to steel blue */
+  --panel: #10151b;
+  --line: #222a33;
+  --fg: #e9edf1;
+  --muted: #8b96a3;
+  --cold: #7cc6ff;
+  --warm: #ff8b3d;
+  --t: 0.35;
+  --temp: color-mix(in oklch, var(--cold), var(--warm) calc(var(--t) * 100%));
+  --temp-soft: color-mix(in oklch, var(--temp) 16%, transparent);
+  --display: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --body: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --gutter: max(16px, env(safe-area-inset-left, 0px));
+  --gutter-r: max(16px, env(safe-area-inset-right, 0px));
+  --wrap: 1240px;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--ink); color: var(--fg);
+  font: 400 16px/1.6 var(--body); font-stretch: 100%;
+  -webkit-font-smoothing: antialiased; overflow-x: hidden;
+}
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 60; background: var(--ink); }
+a { color: inherit; }
+:focus-visible { outline: 2px solid var(--temp); outline-offset: 3px; border-radius: 4px; }
+.wrap { max-width: var(--wrap); margin-inline: auto; padding-left: var(--gutter); padding-right: var(--gutter-r); }
+.mono { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+.eyebrow { font: 500 12px/1 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--temp); transition: color .4s; }
+h1, h2, h3 { font-family: var(--display); text-wrap: balance; margin: 0; letter-spacing: -0.02em; }
+h2 { font-size: clamp(34px, 5.2vw, 64px); line-height: .98; font-weight: 700; font-stretch: 112%; }
+h3 { font-size: 21px; font-weight: 650; font-stretch: 105%; letter-spacing: -0.01em; }
+p { margin: 0; }
+.lede { color: var(--muted); font-size: 18px; max-width: 58ch; }
+.btn {
+  display: inline-flex; align-items: center; gap: 10px; border: 0; cursor: pointer;
+  font: 600 15px/1 var(--body); font-stretch: 108%; text-decoration: none;
+  padding: 15px 22px; border-radius: 999px; transition: background .4s, color .2s, transform .2s;
+}
+.btn-primary { background: var(--temp); color: #07090c; }
+.btn-primary:hover { transform: translateY(-1px); }
+.btn-ghost { background: color-mix(in oklch, var(--fg) 8%, transparent); color: var(--fg); backdrop-filter: blur(10px); }
+.btn-ghost:hover { background: color-mix(in oklch, var(--fg) 14%, transparent); }
+.btn svg { width: 16px; height: 16px; }
+
+/* ---------- Nav ---------- */
+.nav {
+  position: fixed; top: env(safe-area-inset-top, 0px); left: 0; right: 0; z-index: 50;
+  padding-left: var(--gutter); padding-right: var(--gutter-r);
+  transition: background .3s, border-color .3s; border-bottom: 1px solid transparent;
+}
+.nav.solid { background: color-mix(in oklch, var(--ink) 82%, transparent); backdrop-filter: blur(16px) saturate(1.4); border-bottom-color: var(--line); }
+.nav-in { max-width: var(--wrap); margin-inline: auto; display: flex; align-items: center; gap: 28px; height: 72px; }
+.brand { display: flex; align-items: center; gap: 10px; text-decoration: none; font: 700 17px/1 var(--display); font-stretch: 125%; letter-spacing: .02em; text-transform: uppercase; }
+.brand-mark { width: 26px; height: 26px; border-radius: 50%; background: conic-gradient(from 200deg, var(--cold), var(--warm), var(--cold)); position: relative; }
+.brand-mark::after { content: ""; position: absolute; inset: 6px; border-radius: 50%; background: var(--ink); }
+.nav-links { display: flex; gap: 26px; margin-left: auto; font-size: 14px; }
+.nav-links a { text-decoration: none; color: var(--muted); transition: color .2s; }
+.nav-links a:hover { color: var(--fg); }
+.nav-phone { font: 500 13px/1 var(--mono); color: var(--fg); user-select: all; }
+.nav .btn { padding: 11px 18px; font-size: 14px; }
+@media (max-width: 900px) { .nav-links, .nav-phone { display: none; } .nav .btn { margin-left: auto; } }
+
+/* ---------- Hero ---------- */
+.hero { position: relative; min-height: clamp(640px, 92vh, 900px); display: grid; align-items: end; isolation: isolate; overflow: hidden; }
+.hero-video { position: absolute; inset: 0; z-index: -3; }
+.hero-video video { width: 100%; height: 100%; object-fit: cover; transform: scale(1.06); filter: saturate(.7) contrast(1.05); }
+.hero-shade { position: absolute; inset: 0; z-index: -2; background:
+  linear-gradient(180deg, rgba(9,12,16,.55) 0%, rgba(9,12,16,.15) 35%, rgba(9,12,16,.85) 82%, var(--ink) 100%),
+  radial-gradient(80% 60% at 75% 55%, var(--temp-soft), transparent 70%); transition: background .4s; }
+#flow { position: absolute; inset: 0; z-index: -1; width: 100%; height: 100%; pointer-events: none; mix-blend-mode: screen; }
+.hero-grid { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 40px; align-items: end; padding-block: 140px 72px; }
+.hero h1 { font-size: clamp(48px, 8.4vw, 124px); line-height: .9; font-weight: 750; font-stretch: 118%; letter-spacing: -0.035em; }
+.hero h1 .swap { display: block; color: var(--temp); transition: color .4s; font-stretch: 62%; font-weight: 300; font-style: normal; letter-spacing: -0.02em; }
+.hero-copy { display: grid; gap: 28px; }
+.hero-copy .lede { color: #c3cbd4; }
+.hero-cta { display: flex; flex-wrap: wrap; gap: 12px; }
+.hero-meta { display: flex; flex-wrap: wrap; gap: 8px 22px; font: 400 12px/1.4 var(--mono); color: var(--muted); letter-spacing: .04em; }
+.hero-meta b { color: var(--fg); font-weight: 500; }
+
+/* Thermostat */
+.stat-card { justify-self: end; width: min(100%, 400px); padding: 26px; border-radius: 28px; background: color-mix(in oklch, var(--ink) 55%, transparent); backdrop-filter: blur(22px) saturate(1.3); border: 1px solid color-mix(in oklch, var(--fg) 12%, transparent); box-shadow: 0 40px 80px -30px rgba(0,0,0,.7), inset 0 1px 0 rgba(255,255,255,.06); }
+.stat-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; font: 500 11px/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+.live { display: inline-flex; align-items: center; gap: 7px; }
+.live::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--temp); box-shadow: 0 0 0 0 var(--temp); animation: ping 2.2s infinite; }
+@keyframes ping { 0% { box-shadow: 0 0 0 0 color-mix(in oklch, var(--temp) 70%, transparent); } 80%,100% { box-shadow: 0 0 0 9px transparent; } }
+.dial { position: relative; width: 100%; aspect-ratio: 1; max-width: 100%; touch-action: none; cursor: grab; user-select: none; -webkit-user-select: none; }
+.dial:active { cursor: grabbing; }
+.dial svg { width: 100%; height: 100%; display: block; overflow: visible; }
+.dial-read { position: absolute; inset: 0; display: grid; place-content: center; text-align: center; pointer-events: none; }
+.dial-mode { font: 500 11px/1 var(--mono); letter-spacing: .2em; text-transform: uppercase; color: var(--temp); transition: color .4s; }
+.dial-temp { font: 300 92px/1 var(--display); font-stretch: 62%; letter-spacing: -0.04em; font-variant-numeric: tabular-nums; margin-top: 6px; }
+.dial-temp sup { font-size: .32em; vertical-align: top; position: relative; top: .5em; margin-left: 2px; color: var(--muted); }
+.dial-sub { font: 400 12px/1.4 var(--mono); color: var(--muted); margin-top: 6px; }
+.stat-foot { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--line); border-radius: 14px; overflow: hidden; margin-top: 10px; }
+.stat-foot div { background: color-mix(in oklch, var(--ink) 80%, transparent); padding: 12px 10px; }
+.stat-foot dt { font: 500 10px/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+.stat-foot dd { margin: 6px 0 0; font: 500 15px/1 var(--mono); font-variant-numeric: tabular-nums; }
+.hint { text-align: center; margin-top: 12px; font: 400 11px/1 var(--mono); color: var(--muted); letter-spacing: .06em; }
+@media (max-width: 900px) {
+  .hero-grid { grid-template-columns: 1fr; padding-block: 120px 48px; }
+  .stat-card { justify-self: stretch; width: 100%; max-width: 440px; }
+}
+
+/* ---------- Marquee ---------- */
+.ticker { border-block: 1px solid var(--line); overflow: hidden; padding-block: 18px; }
+.ticker-track { display: flex; gap: 56px; width: max-content; animation: slide 48s linear infinite; font: 500 13px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.ticker-track span { display: inline-flex; gap: 56px; align-items: center; white-space: nowrap; }
+.ticker-track i { width: 6px; height: 6px; border-radius: 50%; background: var(--temp); display: inline-block; transition: background .4s; }
+@keyframes slide { to { transform: translateX(-50%); } }
+
+/* ---------- Seasons ---------- */
+section { padding-block: clamp(80px, 11vw, 150px); }
+.sec-head { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 32px 60px; align-items: end; margin-bottom: 56px; }
+.sec-head > div { display: grid; gap: 18px; }
+@media (max-width: 820px) { .sec-head { grid-template-columns: 1fr; } }
+.seasons-stage { position: relative; border-radius: 32px; overflow: hidden; aspect-ratio: 16 / 8; min-height: 460px; max-width: 100%; background: var(--panel); isolation: isolate; }
+.seasons-stage video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: opacity .5s; }
+.seasons-stage .v-heat { opacity: var(--t); }
+.seasons-stage .v-cold { opacity: calc(1 - var(--t)); }
+.seasons-stage::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(9,12,16,.88) 0%, rgba(9,12,16,.35) 55%, rgba(9,12,16,.1) 100%); z-index: 1; }
+.seasons-ui { position: absolute; inset: 0; z-index: 2; display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: end; gap: 24px; padding: clamp(22px, 4vw, 52px); }
+.seasons-copy { display: grid; gap: 16px; max-width: 520px; }
+.seasons-copy h3 { font-size: clamp(30px, 4vw, 52px); font-stretch: 112%; line-height: 1; font-weight: 700; letter-spacing: -0.03em; }
+.seasons-copy p { color: #c8d0d8; }
+.season-toggle { display: inline-flex; padding: 5px; border-radius: 999px; background: rgba(9,12,16,.6); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,.1); }
+.season-toggle button { border: 0; background: transparent; color: var(--muted); font: 500 12px/1 var(--mono); letter-spacing: .1em; text-transform: uppercase; padding: 11px 16px; border-radius: 999px; cursor: pointer; transition: background .3s, color .3s; }
+.season-toggle button[aria-pressed="true"] { background: var(--temp); color: #07090c; }
+.readouts { display: grid; gap: 10px; min-width: 210px; }
+.readout { padding: 14px 16px; border-radius: 16px; background: rgba(9,12,16,.55); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,.08); }
+.readout dt { font: 500 10px/1 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+.readout dd { margin: 8px 0 0; font: 500 22px/1 var(--mono); font-variant-numeric: tabular-nums; }
+.readout dd small { font-size: 12px; color: var(--muted); margin-left: 4px; }
+@media (max-width: 760px) {
+  .seasons-stage { aspect-ratio: auto; min-height: 640px; }
+  .seasons-ui { grid-template-columns: 1fr; }
+  .readouts { grid-template-columns: repeat(3, minmax(0, 1fr)); min-width: 0; }
+  .readout dd { font-size: 17px; }
+  .seasons-stage::after { background: linear-gradient(0deg, rgba(9,12,16,.92) 15%, rgba(9,12,16,.2) 100%); }
+}
+
+/* ---------- Services ---------- */
+.services { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 16px; }
+.svc { position: relative; overflow: hidden; border-radius: 24px; background: var(--panel); min-height: 380px; display: flex; flex-direction: column; justify-content: flex-end; padding: 26px; isolation: isolate; text-decoration: none; border: 1px solid var(--line); }
+.svc:nth-child(1) { grid-column: span 7; }
+.svc:nth-child(2) { grid-column: span 5; }
+.svc:nth-child(3) { grid-column: span 5; }
+.svc:nth-child(4) { grid-column: span 7; }
+.svc video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -2; filter: saturate(.6) brightness(.75); transform: scale(1.04); transition: transform 1.2s cubic-bezier(.2,.7,.2,1), filter .6s; }
+.svc::before { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(180deg, transparent 20%, rgba(9,12,16,.92) 92%); }
+.svc:hover video, .svc:focus-visible video { transform: scale(1.12); filter: saturate(1) brightness(.85); }
+.svc-tag { position: absolute; top: 22px; left: 26px; font: 500 11px/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--fg); padding: 8px 11px; border-radius: 999px; background: rgba(9,12,16,.5); backdrop-filter: blur(8px); }
+.svc h3 { font-size: clamp(24px, 2.6vw, 34px); font-stretch: 115%; font-weight: 700; letter-spacing: -0.02em; }
+.svc p { color: #b7c0ca; margin-top: 10px; max-width: 46ch; }
+.svc ul { list-style: none; padding: 0; margin: 18px 0 0; display: flex; flex-wrap: wrap; gap: 8px; }
+.svc li { font: 400 12px/1 var(--mono); padding: 8px 10px; border-radius: 8px; border: 1px solid rgba(255,255,255,.14); color: #d6dde4; }
+.svc-plain { background:
+  radial-gradient(120% 90% at 100% 0%, var(--temp-soft), transparent 60%), var(--panel); transition: background .4s; }
+.svc-plain .big { font: 300 clamp(80px, 11vw, 150px)/.85 var(--display); font-stretch: 62%; letter-spacing: -0.05em; color: var(--temp); transition: color .4s; margin-bottom: auto; padding-top: 34px; }
+@media (max-width: 860px) { .svc:nth-child(n) { grid-column: span 12; } .svc { min-height: 340px; } }
+
+/* ---------- Process ---------- */
+.process { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0; border-top: 1px solid var(--line); }
+.step { padding: 28px 24px 8px 0; display: grid; gap: 14px; align-content: start; position: relative; }
+.step + .step { padding-left: 24px; border-left: 1px solid var(--line); }
+.step-n { font: 500 12px/1 var(--mono); color: var(--temp); letter-spacing: .1em; transition: color .4s; }
+.step p { color: var(--muted); font-size: 15px; }
+.step .spec { font: 400 12px/1.5 var(--mono); color: var(--fg); padding-top: 14px; border-top: 1px dashed var(--line); }
+.step::before { content: ""; position: absolute; top: -1px; left: 0; height: 2px; width: 0; background: var(--temp); transition: width 1s cubic-bezier(.2,.7,.2,1), background .4s; }
+.step + .step::before { left: -1px; }
+.process.on .step::before { width: 100%; }
+.process.on .step:nth-child(2)::before { transition-delay: .2s; }
+.process.on .step:nth-child(3)::before { transition-delay: .4s; }
+.process.on .step:nth-child(4)::before { transition-delay: .6s; }
+@media (max-width: 900px) {
+  .process { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .step:nth-child(3) { padding-left: 0; border-left: 0; }
+}
+@media (max-width: 560px) {
+  .process { grid-template-columns: 1fr; }
+  .step + .step { padding-left: 0; border-left: 0; border-top: 1px solid var(--line); }
+}
+
+/* ---------- Savings ---------- */
+.savings { background: var(--panel); border-block: 1px solid var(--line); }
+.calc { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 20px; }
+.calc-in, .calc-out { border-radius: 24px; padding: clamp(22px, 3vw, 36px); }
+.calc-in { background: var(--ink); border: 1px solid var(--line); display: grid; gap: 28px; }
+.field { display: grid; gap: 12px; }
+.field-top { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+.field label, .field .lbl { font: 500 12px/1 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.field output { font: 500 18px/1 var(--mono); font-variant-numeric: tabular-nums; }
+input[type="range"] { -webkit-appearance: none; appearance: none; width: 100%; height: 6px; border-radius: 6px; background: linear-gradient(90deg, var(--temp) var(--p, 50%), var(--line) var(--p, 50%)); outline-offset: 6px; }
+input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 22px; height: 22px; border-radius: 50%; background: var(--fg); border: 5px solid var(--temp); cursor: pointer; }
+input[type="range"]::-moz-range-thumb { width: 12px; height: 12px; border-radius: 50%; background: var(--fg); border: 5px solid var(--temp); cursor: pointer; }
+.seg { display: flex; flex-wrap: wrap; gap: 8px; }
+.seg button { flex: 1 1 auto; border: 1px solid var(--line); background: transparent; color: var(--muted); font: 500 13px/1 var(--mono); padding: 13px 12px; border-radius: 12px; cursor: pointer; transition: all .25s; }
+.seg button[aria-pressed="true"] { border-color: var(--temp); color: var(--fg); background: var(--temp-soft); }
+.calc-out { background: radial-gradient(100% 80% at 100% 100%, var(--temp-soft), transparent 70%), #0d1217; border: 1px solid var(--line); display: grid; gap: 24px; align-content: space-between; transition: background .4s; }
+.big-save { font: 300 clamp(72px, 10vw, 132px)/.9 var(--display); font-stretch: 62%; letter-spacing: -0.04em; font-variant-numeric: tabular-nums; }
+.big-save span { color: var(--temp); transition: color .4s; }
+.out-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1px; background: var(--line); border-radius: 14px; overflow: hidden; }
+.out-grid div { background: #0d1217; padding: 14px; }
+.out-grid dt { font: 500 10px/1.2 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.out-grid dd { margin: 8px 0 0; font: 500 18px/1 var(--mono); font-variant-numeric: tabular-nums; }
+.fine { font: 400 12px/1.6 var(--mono); color: var(--muted); }
+.bar { height: 10px; border-radius: 10px; background: var(--line); overflow: hidden; display: flex; }
+.bar i { display: block; height: 100%; background: var(--temp); transition: width .5s cubic-bezier(.2,.7,.2,1), background .4s; }
+.bars { display: grid; gap: 12px; }
+.bars .row { display: grid; grid-template-columns: 92px minmax(0, 1fr) 84px; gap: 12px; align-items: center; font: 400 12px/1 var(--mono); color: var(--muted); }
+.bars .row b { color: var(--fg); font-weight: 500; text-align: right; font-variant-numeric: tabular-nums; }
+.bars .old i { background: #5b6672; }
+@media (max-width: 860px) { .calc { grid-template-columns: 1fr; } }
+
+/* ---------- Plans ---------- */
+.plans { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+.plan { border: 1px solid var(--line); border-radius: 24px; padding: 30px; display: grid; gap: 22px; align-content: start; background: var(--ink); }
+.plan.feat { background: linear-gradient(160deg, var(--temp-soft), transparent 60%), var(--panel); border-color: color-mix(in oklch, var(--temp) 50%, var(--line)); transition: background .4s, border-color .4s; }
+.plan-name { display: flex; justify-content: space-between; align-items: center; }
+.plan-name .pill { font: 500 10px/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: #07090c; background: var(--temp); padding: 7px 9px; border-radius: 999px; transition: background .4s; }
+.price { font: 300 64px/1 var(--display); font-stretch: 62%; letter-spacing: -0.03em; }
+.price small { font: 400 13px/1 var(--mono); color: var(--muted); letter-spacing: 0; margin-left: 6px; }
+.plan ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 12px; font-size: 15px; color: #c6ced6; }
+.plan li { display: grid; grid-template-columns: 18px minmax(0, 1fr); gap: 10px; }
+.plan li::before { content: ""; width: 8px; height: 8px; margin-top: 8px; border-radius: 2px; background: var(--temp); transform: rotate(45deg); transition: background .4s; }
+.plan .btn { justify-content: center; }
+@media (max-width: 900px) { .plans { grid-template-columns: 1fr; max-width: 520px; } }
+
+/* ---------- Proof ---------- */
+.proof { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); gap: 20px; }
+.quote { border-radius: 24px; padding: clamp(26px, 4vw, 48px); background: var(--panel); border: 1px solid var(--line); display: grid; gap: 28px; align-content: space-between; }
+.quote blockquote { margin: 0; font: 400 clamp(22px, 2.6vw, 32px)/1.3 var(--display); font-stretch: 100%; letter-spacing: -0.015em; text-wrap: pretty; }
+.quote figcaption { font: 400 13px/1.5 var(--mono); color: var(--muted); }
+.quote figcaption b { color: var(--fg); font-weight: 500; display: block; }
+.nums { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1px; background: var(--line); border-radius: 24px; overflow: hidden; border: 1px solid var(--line); }
+.nums div { background: var(--ink); padding: 26px 22px; display: grid; gap: 10px; align-content: end; min-height: 160px; }
+.nums strong { font: 300 56px/1 var(--display); font-stretch: 62%; letter-spacing: -0.03em; font-variant-numeric: tabular-nums; }
+.nums span { font: 400 13px/1.4 var(--body); color: var(--muted); }
+@media (max-width: 860px) { .proof { grid-template-columns: 1fr; } }
+
+/* ---------- Booking ---------- */
+.book { position: relative; overflow: hidden; isolation: isolate; }
+.book video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -2; opacity: .35; filter: saturate(.4); }
+.book::before { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(180deg, var(--ink), rgba(9,12,16,.6) 30%, rgba(9,12,16,.75) 70%, var(--ink)); }
+.book-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); gap: 56px; align-items: start; }
+.book-copy { display: grid; gap: 22px; }
+.contact-lines { display: grid; gap: 14px; margin-top: 12px; }
+.contact-lines div { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+.contact-lines .k { font: 500 11px/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--muted); width: 96px; }
+.contact-lines .v { font: 500 20px/1.2 var(--mono); user-select: all; }
+.copy-btn { border: 1px solid var(--line); background: transparent; color: var(--muted); font: 500 11px/1 var(--mono); padding: 7px 10px; border-radius: 8px; cursor: pointer; letter-spacing: .06em; }
+.copy-btn:hover { color: var(--fg); border-color: var(--muted); }
+form.card { border-radius: 28px; padding: clamp(22px, 3vw, 36px); background: color-mix(in oklch, var(--ink) 70%, transparent); backdrop-filter: blur(20px); border: 1px solid color-mix(in oklch, var(--fg) 12%, transparent); display: grid; gap: 18px; }
+.form-row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+.in { display: grid; gap: 8px; }
+.in label { font: 500 11px/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+.in input, .in select, .in textarea { width: 100%; background: rgba(255,255,255,.04); border: 1px solid var(--line); color: var(--fg); border-radius: 12px; padding: 14px; font: 400 16px/1.3 var(--body); transition: border-color .2s; }
+.in textarea { resize: vertical; min-height: 92px; }
+.in input:focus, .in select:focus, .in textarea:focus { outline: none; border-color: var(--temp); }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chips label { cursor: pointer; }
+.chips input { position: absolute; opacity: 0; pointer-events: none; }
+.chips span { display: inline-block; font: 500 13px/1 var(--mono); padding: 11px 13px; border-radius: 999px; border: 1px solid var(--line); color: var(--muted); transition: all .2s; }
+.chips input:checked + span { border-color: var(--temp); color: var(--fg); background: var(--temp-soft); }
+.chips input:focus-visible + span { outline: 2px solid var(--temp); outline-offset: 2px; }
+.err { font: 400 12px/1.4 var(--mono); color: #ff8f8f; min-height: 1em; }
+.done { display: grid; gap: 14px; text-align: left; }
+.done .tick { width: 54px; height: 54px; border-radius: 50%; display: grid; place-items: center; background: var(--temp); color: #07090c; }
+@media (max-width: 900px) { .book-grid { grid-template-columns: 1fr; gap: 40px; } }
+@media (max-width: 520px) { .form-row { grid-template-columns: 1fr; } }
+
+/* ---------- Footer ---------- */
+footer { border-top: 1px solid var(--line); padding-block: 56px 40px; }
+.foot { display: grid; grid-template-columns: minmax(0, 1.4fr) repeat(3, minmax(0, 1fr)); gap: 32px; }
+.foot h4 { margin: 0 0 14px; font: 500 11px/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+.foot ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; font-size: 14px; }
+.foot a { text-decoration: none; color: #c6ced6; }
+.foot a:hover { color: var(--fg); }
+.wordmark { font: 800 clamp(56px, 13vw, 200px)/.8 var(--display); font-stretch: 125%; letter-spacing: -0.04em; text-transform: uppercase; margin-top: 64px; color: transparent; -webkit-text-stroke: 1px var(--line); white-space: nowrap; overflow: hidden; }
+.legal { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; font: 400 12px/1.5 var(--mono); color: var(--muted); margin-top: 24px; }
+@media (max-width: 820px) { .foot { grid-template-columns: repeat(2, minmax(0, 1fr)); } .foot > div:first-child { grid-column: span 2; } }
+
+/* ---------- Motion ---------- */
+@supports (animation-timeline: view()) {
+  .rise { animation: rise linear both; animation-timeline: view(); animation-range: entry 0% entry 40%; }
+  @keyframes rise { from { transform: translateY(36px); } to { transform: none; } }
+}
+.load > * { animation: load .9s cubic-bezier(.2,.7,.2,1) both; }
+.load > *:nth-child(2) { animation-delay: .08s; }
+.load > *:nth-child(3) { animation-delay: .16s; }
+.load > *:nth-child(4) { animation-delay: .24s; }
+@keyframes load { from { transform: translateY(20px); opacity: .2; } }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  html { scroll-behavior: auto; }
+}
+
+/* ---------- Kansas City additions ---------- */
+.alert { display: flex; justify-content: center; align-items: center; gap: 10px; flex-wrap: wrap; text-align: center; padding: 8px var(--gutter-r) 8px var(--gutter); font: 500 12px/1.4 var(--mono); letter-spacing: .04em; background: color-mix(in oklch, var(--temp) 18%, var(--ink)); color: var(--fg); border-bottom: 1px solid color-mix(in oklch, var(--temp) 35%, transparent); transition: background .4s; }
+.alert a { color: var(--temp); text-decoration: none; font-weight: 500; transition: color .4s; }
+.nav { padding-left: 0; padding-right: 0; }
+.nav-in { padding-left: var(--gutter); padding-right: var(--gutter-r); }
+.nav-phone { text-decoration: none; }
+.hero-grid { padding-top: 172px; }
+@media (max-width: 900px) { .hero-grid { padding-top: 156px; } }
+
+/* Seasonal offer band */
+.offer-band { padding-block: 0 clamp(60px, 8vw, 110px); }
+.offer { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; gap: 20px 36px; align-items: center; padding: clamp(22px, 3vw, 34px) clamp(22px, 3.4vw, 40px); border-radius: 24px; border: 1px dashed color-mix(in oklch, var(--temp) 60%, var(--line)); background: radial-gradient(90% 140% at 0% 0%, var(--temp-soft), transparent 60%), var(--panel); transition: background .4s, border-color .4s; }
+.offer h3 { font-size: clamp(24px, 2.8vw, 34px); font-stretch: 112%; font-weight: 700; letter-spacing: -0.02em; margin-top: 10px; }
+.offer p { color: var(--muted); margin-top: 8px; max-width: 60ch; }
+.offer-price { font: 300 clamp(64px, 8vw, 96px)/.9 var(--display); font-stretch: 62%; letter-spacing: -0.04em; color: var(--temp); transition: color .4s; white-space: nowrap; }
+.offer-price small { display: block; font: 400 12px/1 var(--mono); letter-spacing: .08em; color: var(--muted); margin-top: 8px; text-decoration: line-through; }
+@media (max-width: 760px) { .offer { grid-template-columns: 1fr; } }
+
+/* Reviews */
+.revs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin-top: 16px; }
+.rev { border: 1px solid var(--line); border-radius: 20px; padding: 24px; background: var(--ink); display: grid; gap: 14px; align-content: start; }
+.rev .stars { color: var(--temp); letter-spacing: 3px; font-size: 14px; transition: color .4s; }
+.rev p { font-size: 15px; color: #c6ced6; }
+.rev footer { border: 0; padding: 0; font: 400 12px/1.5 var(--mono); color: var(--muted); }
+.rev footer b { color: var(--fg); font-weight: 500; }
+.sample-note { font: 400 11px/1.4 var(--mono); color: var(--muted); margin-top: 12px; letter-spacing: .04em; }
+@media (max-width: 900px) { .revs { grid-template-columns: 1fr; } }
+
+/* Service area */
+.area { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1.1fr); gap: 16px; }
+.area > * { min-width: 0; }
+.state-h span { min-width: 0; }
+.state { border: 1px solid var(--line); border-radius: 24px; padding: 26px; display: grid; gap: 16px; align-content: start; background: var(--panel); }
+.state-h { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+.state-h b { font: 700 44px/1 var(--display); font-stretch: 125%; letter-spacing: -0.02em; color: var(--temp); transition: color .4s; }
+.state-h span { font: 500 11px/1.3 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); text-align: right; }
+.towns { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+.towns li { font-size: 14px; padding: 6px 12px; border-radius: 999px; border: 1px solid var(--line); color: #c6ced6; }
+.zip { border-radius: 24px; padding: 26px; display: grid; gap: 16px; align-content: start; background: radial-gradient(100% 90% at 100% 0%, var(--temp-soft), transparent 65%), var(--ink); border: 1px solid color-mix(in oklch, var(--temp) 40%, var(--line)); transition: background .4s, border-color .4s; }
+.zip { grid-template-columns: minmax(0, 1fr); }
+.zip > * { min-width: 0; }
+.zip h3 { font-size: 26px; font-stretch: 112%; }
+.zip-row { display: flex; gap: 10px; }
+.zip-row input { flex: 1; min-width: 0; background: rgba(255,255,255,.04); border: 1px solid var(--line); color: var(--fg); border-radius: 999px; padding: 13px 18px; font: 500 18px/1 var(--mono); letter-spacing: .12em; }
+.zip-row input:focus { outline: none; border-color: var(--temp); }
+.zip-out { font: 400 14px/1.5 var(--body); color: var(--muted); min-height: 3em; }
+.zip-out b { color: var(--fg); font-weight: 600; }
+@media (max-width: 1000px) { .area { grid-template-columns: repeat(2, minmax(0, 1fr)); } .zip { grid-column: span 2; } }
+@media (max-width: 640px) { .area { grid-template-columns: minmax(0, 1fr); } .zip { grid-column: auto; } }
+
+/* FAQ */
+.faq { display: grid; border-top: 1px solid var(--line); max-width: 920px; }
+.faq details { border-bottom: 1px solid var(--line); }
+.faq summary { list-style: none; cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 20px; padding: 22px 0; font: 600 clamp(18px, 2vw, 22px)/1.3 var(--display); font-stretch: 105%; letter-spacing: -0.01em; }
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary::after { content: "+"; font: 300 30px/1 var(--display); color: var(--temp); transition: transform .3s, color .4s; flex: none; }
+.faq details[open] summary::after { transform: rotate(45deg); }
+.faq details p { color: var(--muted); padding: 0 0 24px; max-width: 72ch; }
+
+/* Phone call bar */
+.callbar { display: none; }
+@media (max-width: 700px) {
+  .callbar { display: flex; gap: 10px; position: fixed; left: 0; right: 0; bottom: 0; z-index: 55;
+    padding: 10px max(16px, env(safe-area-inset-right, 0px)) calc(10px + env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px));
+    background: color-mix(in oklch, var(--ink) 88%, transparent); backdrop-filter: blur(16px); border-top: 1px solid var(--line); }
+  .callbar .btn { flex: 1; justify-content: center; padding: 14px; }
+  footer { padding-bottom: 110px; }
+}
+@media (max-width: 700px) { #alert { display: none; } }
+.revs.two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+@media (max-width: 900px) { .revs.two { grid-template-columns: 1fr; } }
+.hero .eyebrow { line-height: 1.5; }
+.hero-grid { padding-top: 210px; }
+@media (max-width: 900px) { .hero-grid { padding-top: 200px; } }
+</style>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "HVACBusiness",
+  "name": "Gunn Heating & Cooling",
+  "telephone": "+18165519177",
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Kansas City",
+    "addressRegion": "MO",
+    "addressCountry": "US"
+  },
+  "areaServed": [
+    "Kansas City, KS",
+    "Lenexa",
+    "Shawnee",
+    "Kansas City"
+  ]
+}
+</script>
+
+<nav class="nav" id="nav">
+  <div class="alert" style="background:var(--panel);color:var(--muted)">Website preview for Gunn Heating &amp; Cooling · not the live site · prices and offers are placeholders</div>
+  <div class="alert" id="alert"><span id="alertText">Cold nights ahead. Book your furnace check before the first hard freeze.</span><a href="tel:+18165519177">Call (816) 551-9177</a></div>
+  <div class="nav-in">
+    <a class="brand" href="#top"><span class="brand-mark"></span>Gunn</a>
+    <div class="nav-links">
+      <a href="#seasons">Seasons</a>
+      <a href="#services">Services</a>
+      <a href="#savings">Savings</a>
+      <a href="#plans">Comfort Club</a>
+      <a href="#area">Service area</a>
+    </div>
+    <a class="nav-phone" href="tel:+18165519177">(816) 551-9177</a>
+    <a class="btn btn-primary" href="#book">Book a visit</a>
+  </div>
+</nav>
+
+<header class="hero" id="top">
+  <div class="hero-video"><video src="../../media/rooftop.mp4" autoplay muted loop playsinline preload="auto"></video></div>
+  <div class="hero-shade"></div>
+  <canvas id="flow" aria-hidden="true"></canvas>
+  <div class="wrap hero-grid">
+    <div class="hero-copy load">
+      <span class="eyebrow">Heating · Cooling — locally owned, serving the Kansas City metro</span>
+      <h1>Every room at<span class="swap" id="heroSwap">exactly 70°F.</span></h1>
+      <p class="lede">A locally owned, family-operated heating and cooling company with a 5-star Google rating. Prompt furnace repairs and clean, courteous installs across the Kansas City metro.</p>
+      <div class="hero-cta">
+        <a class="btn btn-primary" href="#book">Book a diagnostic
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a>
+        <a class="btn btn-ghost" href="tel:+18165519177">Call (816) 551-9177</a>
+      </div>
+      <div class="hero-meta"><span><b>5.0★</b> from 103 Google reviews</span><span><b>Family</b> operated</span><span>Locally owned</span></div>
+    </div>
+
+    <div class="stat-card load" aria-label="Interactive thermostat">
+      <div class="stat-head"><span class="live">Living room</span><span id="clock" class="mono">—</span></div>
+      <div class="dial" id="dial" role="slider" tabindex="0" aria-label="Setpoint" aria-valuemin="62" aria-valuemax="82" aria-valuenow="70">
+        <svg viewBox="0 0 300 300" aria-hidden="true">
+          <defs>
+            <linearGradient id="arcG" x1="0" y1="1" x2="1" y2="1">
+              <stop offset="0" stop-color="#7cc6ff"/><stop offset="1" stop-color="#ff8b3d"/>
+            </linearGradient>
+          </defs>
+          <g id="ticks"></g>
+          <path id="track" fill="none" stroke="#222a33" stroke-width="10" stroke-linecap="round"/>
+          <path id="arc" fill="none" stroke="url(#arcG)" stroke-width="10" stroke-linecap="round"/>
+          <circle id="knob" r="13" fill="#e9edf1" stroke="#090c10" stroke-width="4"/>
+        </svg>
+        <div class="dial-read">
+          <span class="dial-mode" id="dialMode">Holding at</span>
+          <span class="dial-temp"><span id="dialTemp">70</span><sup>°F</sup></span>
+          <span class="dial-sub" id="dialSub">Indoor 70.0° · RH 44%</span>
+        </div>
+      </div>
+      <dl class="stat-foot">
+        <div><dt>Outdoor · KC</dt><dd id="outT">—</dd></div>
+        <div><dt>Airflow</dt><dd id="cfm">1,180</dd></div>
+        <div><dt>Filter</dt><dd>MERV 13</dd></div>
+      </dl>
+      <p class="hint">Drag the dial · the whole site follows</p>
+    </div>
+  </div>
+</header>
+
+<div class="ticker" aria-hidden="true">
+  <div class="ticker-track">
+    <span>Furnace repair <i></i> AC repair <i></i> System installation <i></i> Seasonal tune-ups <i></i> Both sides of State Line <i></i></span>
+    <span>Furnace repair <i></i> AC repair <i></i> System installation <i></i> Seasonal tune-ups <i></i> Both sides of State Line <i></i></span>
+  </div>
+</div>
+
+<section id="seasons">
+  <div class="wrap">
+    <div class="sec-head rise">
+      <div><span class="eyebrow">One system, two seasons</span><h2>August at 101°. January at −4°.</h2></div>
+      <p class="lede">Kansas City swings about 100 degrees between July and January, with Gulf humidity in between. A variable-speed system runs at the capacity each hour needs, so it stays quiet and even in both extremes. Switch seasons to see what it's doing.</p>
+    </div>
+    <div class="seasons-stage rise">
+      <video class="v-cold" src="../../media/frost.mp4" autoplay muted loop playsinline preload="metadata"></video>
+      <video class="v-heat" src="../../media/heat.mp4" autoplay muted loop playsinline preload="metadata"></video>
+      <div class="seasons-ui">
+        <div class="seasons-copy">
+          <div class="season-toggle" role="group" aria-label="Season">
+            <button type="button" data-season="cool" aria-pressed="true">Summer · cool</button>
+            <button type="button" data-season="heat" aria-pressed="false">Winter · heat</button>
+          </div>
+          <h3 id="sTitle">Pulls out the heat, and the humidity with it.</h3>
+          <p id="sBody">Long, low-speed cycles keep air on a cold coil longer, bringing a muggy July house down to 45% humidity so 74° feels like 72°.</p>
+        </div>
+        <dl class="readouts">
+          <div class="readout"><dt>Efficiency</dt><dd id="r1">20.5<small>SEER2</small></dd></div>
+          <div class="readout"><dt>Compressor</dt><dd id="r2">42<small>% load</small></dd></div>
+          <div class="readout"><dt>Sound</dt><dd id="r3">54<small>dBA</small></dd></div>
+        </dl>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="offer-band" aria-label="Seasonal offer">
+  <div class="wrap">
+    <div class="offer rise">
+      <div>
+        <span class="eyebrow" id="offerEyebrow">Seasonal offer · through Dec 31</span>
+        <h3 id="offerTitle">Furnace safety check &amp; tune-up</h3>
+        <p id="offerBody">21-point inspection, carbon monoxide test, flame sensor and igniter check, and a heat exchanger inspection before the first hard freeze.</p>
+      </div>
+      <div class="offer-price"><span id="offerPrice">$89</span><small id="offerWas" style="text-decoration:none">Sample price</small></div>
+      <a class="btn btn-primary" href="#book">Claim the $89 visit</a>
+    </div>
+  </div>
+</section>
+
+<section id="services" style="padding-top: 0">
+  <div class="wrap">
+    <div class="sec-head rise">
+      <div><span class="eyebrow">What we do</span><h2>Built for the house you actually live in.</h2></div>
+      <p class="lede">From 1920s bungalows in Brookside to new builds in Olathe, every job starts with measurements, not a rule of thumb. That's how we avoid oversized systems, short cycling and the hot back bedroom.</p>
+    </div>
+    <div class="services">
+      <a class="svc rise" href="#book">
+        <video src="../../media/thermostat.mp4" muted loop playsinline preload="metadata" data-play></video>
+        <span class="svc-tag">Install &amp; replace</span>
+        <h3>Heat pumps, furnaces &amp; central air</h3>
+        <p>Dual-fuel heat pumps, high-efficiency gas furnaces and central AC sized from a room-by-room Manual J.</p>
+        <ul><li>16–24 SEER2</li><li>High-efficiency furnaces</li><li>Repair or replace advice</li></ul>
+      </a>
+      <a class="svc rise" href="#book">
+        <video src="../../media/air.mp4" muted loop playsinline preload="metadata" data-play></video>
+        <span class="svc-tag">Indoor air</span>
+        <h3>Air you can measure</h3>
+        <p>Filtration for KC's spring pollen, whole-home dehumidifiers for summer and humidifiers for dry winter air, verified with before-and-after readings.</p>
+        <ul><li>PM2.5</li><li>CO₂</li><li>RH 40–50%</li></ul>
+      </a>
+      <a class="svc svc-plain rise" href="#book">
+        <span class="big mono" id="repairClock">Same day</span>
+        <span class="svc-tag">Repair · 24/7</span>
+        <h3>When it quits on you.</h3>
+        <p>Call and we'll get you on the schedule as fast as we can. You hear the price before any work starts.</p>
+      </a>
+      <a class="svc rise" href="#book">
+        <video src="../../media/fans.mp4" muted loop playsinline preload="metadata" data-play></video>
+        <span class="svc-tag">Install</span>
+        <h3>Clean, courteous installs</h3>
+        <p>New furnaces and air conditioners installed with care, and the job site left clean.</p>
+        <ul><li>Furnaces</li><li>Central AC</li><li>Heat pumps</li></ul>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section style="padding-top: 0">
+  <div class="wrap">
+    <div class="sec-head rise">
+      <div><span class="eyebrow">How a Gunn install runs</span><h2>Four steps. Each one measured.</h2></div>
+      <p class="lede">You get the numbers from every step in a commissioning report, so you can see the system performs as designed.</p>
+    </div>
+    <div class="process" id="process">
+      <div class="step"><span class="step-n">01 — Survey</span><h3>Load calculation</h3><p>We measure windows, insulation and orientation, then size the system room by room.</p><span class="spec">ACCA Manual J · blower-door test</span></div>
+      <div class="step"><span class="step-n">02 — Design</span><h3>Ducts &amp; equipment</h3><p>Duct runs are sized for quiet, even airflow, and the equipment is matched to the load.</p><span class="spec">Manual S + D · static ≤ 0.5 in. w.c.</span></div>
+      <div class="step"><span class="step-n">03 — Install</span><h3>One-day install</h3><p>A crew of two to four, drop cloths down, permits pulled with your city, nitrogen-purged brazing and sealed duct joints.</p><span class="spec">Triple evacuation · &lt; 500 microns</span></div>
+      <div class="step"><span class="step-n">04 — Commission</span><h3>Tune &amp; verify</h3><p>We measure charge, airflow and temperature split, then hand you the report.</p><span class="spec">Superheat / subcool logged · ΔT 18–22°</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="savings" id="savings">
+  <div class="wrap">
+    <div class="sec-head rise">
+      <div><span class="eyebrow">Savings estimator</span><h2>What your old system costs you.</h2></div>
+      <p class="lede">Move the sliders to match your home. Defaults are set for a typical Kansas City house. The estimate compares cooling energy for your current system against a 20 SEER2 variable-speed heat pump.</p>
+    </div>
+    <div class="calc">
+      <div class="calc-in">
+        <div class="field">
+          <div class="field-top"><label for="sqft">Home size</label><output id="sqftOut" for="sqft">2,200 sq ft</output></div>
+          <input type="range" id="sqft" min="800" max="5000" step="100" value="2200">
+        </div>
+        <div class="field">
+          <span class="lbl">Current system age</span>
+          <div class="seg" id="age" role="group" aria-label="System age">
+            <button type="button" data-seer="14" aria-pressed="false">Under 10 yrs</button>
+            <button type="button" data-seer="12" aria-pressed="true">10–15 yrs</button>
+            <button type="button" data-seer="10" aria-pressed="false">15+ yrs</button>
+          </div>
+        </div>
+        <div class="field">
+          <div class="field-top"><label for="rate">Electric rate</label><output id="rateOut" for="rate">$0.14 / kWh</output></div>
+          <input type="range" id="rate" min="0.08" max="0.35" step="0.01" value="0.14">
+        </div>
+        <div class="field">
+          <div class="field-top"><label for="hours">Cooling hours / year</label><output id="hoursOut" for="hours">1,500 h</output></div>
+          <input type="range" id="hours" min="800" max="3200" step="100" value="1500">
+        </div>
+      </div>
+      <div class="calc-out" aria-live="polite">
+        <div>
+          <span class="eyebrow">Estimated yearly savings</span>
+          <div class="big-save"><span>$</span><span id="save" style="color:var(--fg)">0</span></div>
+        </div>
+        <div class="bars">
+          <div class="row old"><span>Current</span><div class="bar"><i id="barOld"></i></div><b id="kwhOld">—</b></div>
+          <div class="row"><span>Gunn</span><div class="bar"><i id="barNew"></i></div><b id="kwhNew">—</b></div>
+        </div>
+        <dl class="out-grid">
+          <div><dt>System size</dt><dd id="tons">—</dd></div>
+          <div><dt>10-yr savings</dt><dd id="ten">—</dd></div>
+          <div><dt>CO₂ avoided</dt><dd id="co2">—</dd></div>
+        </dl>
+        <p class="fine">Estimate only, cooling energy only. Assumes 25 BTU/h per sq ft, rated SEER for your system's age and 0.39 kg CO₂ per kWh. Financing is available on new systems, subject to credit approval. Your in-home survey gives the real number.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="plans">
+  <div class="wrap">
+    <div class="sec-head rise">
+      <div><span class="eyebrow">Comfort Club</span><h2>Maintenance that pays for itself.</h2></div>
+      <p class="lede">A tuned system uses up to 15% less energy and lasts years longer. Members get priority scheduling during heat waves and cold snaps.</p>
+    </div>
+    <div class="plans">
+      <div class="plan rise">
+        <div class="plan-name"><h3>Essential</h3></div>
+        <div class="price">$14<small>/ month</small></div>
+        <ul><li>One 21-point tune-up a year</li><li>15% off repairs</li><li>Priority scheduling</li></ul>
+        <a class="btn btn-ghost" href="#book">Choose Essential</a>
+      </div>
+      <div class="plan feat rise">
+        <div class="plan-name"><h3>Complete</h3><span class="pill">Most chosen</span></div>
+        <div class="price">$24<small>/ month</small></div>
+        <ul><li>Spring AC and fall furnace tune-ups</li><li>Filters delivered every 90 days</li><li>20% off repairs, no overtime fees</li><li>Annual duct and airflow report</li></ul>
+        <a class="btn btn-primary" href="#book">Choose Complete</a>
+      </div>
+      <div class="plan rise">
+        <div class="plan-name"><h3>Total Air</h3></div>
+        <div class="price">$39<small>/ month</small></div>
+        <ul><li>Everything in Complete</li><li>Indoor air sensor and monthly IAQ report</li><li>Humidifier pad and UV lamp replacement</li><li>Parts covered, one flat yearly fee</li></ul>
+        <a class="btn btn-ghost" href="#book">Choose Total Air</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="reviews" style="padding-top: 0">
+  <div class="wrap">
+    <div class="proof">
+      <figure class="quote rise" style="margin:0">
+        <blockquote>Your best Google reviews go here, word for word, with the customer's first name and neighborhood.</blockquote>
+        <figcaption><b>Placeholder</b>Real reviews are added before this site goes live</figcaption>
+      </figure>
+      <div class="nums rise"><div><strong>5.0★</strong><span>Google rating</span></div><div><strong>103</strong><span>Google reviews</span></div><div><strong>Family</strong><span>operated</span></div><div><strong>Local</strong><span>owned, metro-wide</span></div></div>
+    </div>
+
+  </div>
+</section>
+
+<section id="area" style="padding-top: 0">
+  <div class="wrap">
+    <div class="sec-head rise">
+      <div><span class="eyebrow">Service area</span><h2>Both sides of State Line.</h2></div>
+      <p class="lede">Serving the Kansas City metro on both sides of State Line.</p>
+    </div>
+    <div class="area">
+      <div class="state rise">
+        <div class="state-h"><b>KS</b><span>Johnson · Wyandotte</span></div>
+        <ul class="towns"><li>Kansas City, KS</li><li>Lenexa</li><li>Shawnee</li></ul>
+      </div>
+      <div class="state rise">
+        <div class="state-h"><b>MO</b><span>Jackson County</span></div>
+        <ul class="towns"><li>Kansas City</li></ul>
+      </div>
+      <form class="zip rise" id="zipForm" novalidate>
+        <span class="eyebrow">Check your address</span>
+        <h3>Are you in range?</h3>
+        <div class="zip-row">
+          <label for="zipIn" class="sr" hidden>ZIP code</label>
+          <input id="zipIn" inputmode="numeric" maxlength="5" placeholder="64113" aria-label="ZIP code" autocomplete="postal-code">
+          <button class="btn btn-primary" type="submit">Check</button>
+        </div>
+        <p class="zip-out" id="zipOut" aria-live="polite">Enter a 5-digit ZIP code to see if we cover it and when a tech could arrive.</p>
+      </form>
+    </div>
+  </div>
+</section>
+
+<section id="faq" style="padding-top: 0">
+  <div class="wrap">
+    <div class="sec-head rise">
+      <div><span class="eyebrow">Questions</span><h2>Straight answers.</h2></div>
+      <p class="lede">What Kansas City homeowners ask us most before they book.</p>
+    </div>
+    <div class="faq">
+      <details><summary>How fast can a technician get to me?</summary><p>Call (816) 551-9177 and we'll give you the soonest arrival window we have.</p></details>
+      <details><summary>Should I repair or replace my system?</summary><p>A quick rule: multiply the system's age by the repair cost. If the result is over $5,000, replacement usually makes more sense. Systems over 15 years old, or AC units that still use R-22 refrigerant, are often better replaced. We give you both prices so you can decide.</p></details>
+      <details><summary>Do heat pumps work in a Kansas City winter?</summary><p>Yes. Cold-climate heat pumps keep most of their heating capacity well below freezing. Many Kansas City homes use dual-fuel: the heat pump handles the bulk of the winter, and a gas furnace takes over on the coldest nights, so you always pay the cheaper rate.</p></details>
+      <details><summary>Do you pull permits and handle rebates?</summary><p>Yes. We pull the permits your city requires and help with any utility rebate paperwork your new equipment qualifies for.</p></details>
+      <details><summary>How much does a diagnostic cost?</summary><p>Call for current diagnostic pricing. You hear the cost before any work starts.</p></details>
+    </div>
+  </div>
+</section>
+
+<section class="book" id="book">
+  <video src="../../media/air.mp4" muted loop playsinline preload="none" data-play aria-hidden="true"></video>
+  <div class="wrap book-grid">
+    <div class="book-copy rise">
+      <span class="eyebrow">Book a visit</span>
+      <h2>Tell us what the house is doing.</h2>
+      <p class="lede">We call you back to confirm an arrival window. In a hurry? Call (816) 551-9177.</p>
+      <div class="contact-lines">
+        <div><span class="k">Call</span><a class="v" id="phone" href="tel:+18165519177" style="text-decoration:none">(816) 551-9177</a><button class="copy-btn" type="button" data-copy="phone">Copy</button></div>
+        <div><span class="k">Hours</span><span class="v" style="font-size:16px">Call for hours</span></div>
+      </div>
+    </div>
+    <form class="card rise" id="form" name="service-request" method="POST" data-netlify="true" netlify-honeypot="company" novalidate>
+      <input type="hidden" name="form-name" value="service-request">
+      <p hidden><label>Leave blank <input name="company" id="fhp"></label></p>
+      <div id="formBody" style="display:grid;gap:18px">
+        <div class="in"><span class="lbl" style="font:500 11px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)">What's going on?</span>
+          <div class="chips" role="group" aria-label="Issue">
+            <label><input type="radio" name="issue" id="i1" value="Not heating" checked><span>Not heating</span></label>
+            <label><input type="radio" name="issue" id="i2" value="Not cooling"><span>Not cooling</span></label>
+            <label><input type="radio" name="issue" id="i3" value="Replacement quote"><span>Replacement quote</span></label>
+            <label><input type="radio" name="issue" id="i4" value="Tune-up"><span>Tune-up</span></label>
+            <label><input type="radio" name="issue" id="i5" value="Air quality"><span>Air quality</span></label>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="in"><label for="fname">Name</label><input id="fname" name="name" autocomplete="name" placeholder="Jordan Avery"></div>
+          <div class="in"><label for="fzip">ZIP code</label><input id="fzip" name="zip" inputmode="numeric" maxlength="5" placeholder="66212"></div>
+        </div>
+        <div class="form-row">
+          <div class="in"><label for="ftel">Phone</label><input id="ftel" name="phone" type="tel" autocomplete="tel" placeholder="(816) 555-0100"></div>
+          <div class="in"><label for="fwin">Arrival window</label>
+            <select id="fwin" name="window"><option>As soon as possible</option><option>Tomorrow 8–10 a.m.</option><option>Tomorrow 10–12 p.m.</option><option>Tomorrow 1–3 p.m.</option><option>Tomorrow 3–5 p.m.</option></select></div>
+        </div>
+        <div class="in"><label for="fnote">Details (optional)</label><textarea id="fnote" name="details" placeholder="Furnace runs but blows cold air. Started this morning. Filter changed last month."></textarea></div>
+        <p class="err" id="ferr"></p>
+        <button class="btn btn-primary" type="submit" style="justify-content:center">Request my visit
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 8h10M9 4l4 4-4 4"/></svg></button>
+      </div>
+      <div class="done" id="formDone" hidden>
+        <div class="tick"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>
+        <h3 style="font-size:28px" id="doneTitle">Request sent.</h3>
+        <p class="lede" id="doneText"></p>
+        <p class="fine" id="doneFine"></p>
+        <button class="btn btn-ghost" type="button" id="again" style="justify-self:start">Edit request</button>
+      </div>
+    </form>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="foot">
+      <div style="display:grid;gap:14px;align-content:start">
+        <a class="brand" href="#top"><span class="brand-mark"></span>Gunn</a>
+        <p style="color:var(--muted);font-size:14px;max-width:36ch">Heating and cooling in Kansas City, MO and the Kansas City area. (816) 551-9177</p>
+      </div>
+      <div><h4>Services</h4><ul><li><a href="#services">Heat pumps</a></li><li><a href="#services">Furnaces</a></li><li><a href="#services">Central air</a></li><li><a href="#services">Indoor air quality</a></li><li><a href="#services">Commercial</a></li></ul></div>
+      <div><h4>Company</h4><ul><li><a href="#plans">Comfort Club</a></li><li><a href="#savings">Savings estimator</a></li><li><a href="#faq">FAQ</a></li><li><a href="#book">Financing</a></li></ul></div>
+      <div><h4>Service area</h4><ul><li>Kansas City, KS</li><li>Lenexa</li><li>Shawnee</li><li>Kansas City</li></ul></div>
+    </div>
+    <div class="wordmark" aria-hidden="true" style="font-size:clamp(40px,10vw,160px)">Gunn</div>
+    <div class="legal"><span>© 2026 Gunn Heating &amp; Cooling</span><span>Website preview · not the live site · Video: Mixkit</span></div>
+  </div>
+</footer>
+
+<div class="callbar">
+  <a class="btn btn-primary" href="tel:+18165519177">Call now</a>
+  <a class="btn btn-ghost" href="#book">Book a visit</a>
+</div>
+<script>
+(() => {
+  const root = document.documentElement;
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const MIN = 62, MAX = 82;
+  const month = new Date().getMonth();
+  const WINTER = month >= 9 || month <= 2; // Oct–Mar
+  let temp = 70, tShown = 0.4;
+
+  /* ---------- Nav ---------- */
+  const nav = document.getElementById('nav');
+  const onScroll = () => nav.classList.toggle('solid', scrollY > 40);
+  addEventListener('scroll', onScroll, { passive: true }); onScroll();
+
+  /* ---------- Clock ---------- */
+  const clock = document.getElementById('clock');
+  const tick = () => clock.textContent = new Date().toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+  tick(); setInterval(tick, 30000);
+
+  /* ---------- Dial ---------- */
+  const dial = document.getElementById('dial');
+  const C = 150, R = 118, START = 135, SWEEP = 270;
+  const pt = (deg, r = R) => { const a = deg * Math.PI / 180; return [C + r * Math.cos(a), C + r * Math.sin(a)]; };
+  const arcPath = (from, to) => {
+    const [x1, y1] = pt(from), [x2, y2] = pt(to);
+    const large = (to - from) > 180 ? 1 : 0;
+    return `M${x1.toFixed(2)} ${y1.toFixed(2)} A${R} ${R} 0 ${large} 1 ${x2.toFixed(2)} ${y2.toFixed(2)}`;
+  };
+  document.getElementById('track').setAttribute('d', arcPath(START, START + SWEEP));
+  const ticks = document.getElementById('ticks');
+  for (let i = 0; i <= 40; i++) {
+    const deg = START + SWEEP * i / 40, major = i % 10 === 0;
+    const [x1, y1] = pt(deg, 140), [x2, y2] = pt(deg, major ? 128 : 133);
+    const l = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+    l.setAttribute('x1', x1); l.setAttribute('y1', y1); l.setAttribute('x2', x2); l.setAttribute('y2', y2);
+    l.setAttribute('stroke', major ? '#8b96a3' : '#2c353f'); l.setAttribute('stroke-width', major ? 2 : 1.2); l.setAttribute('stroke-linecap', 'round');
+    ticks.appendChild(l);
+    if (major) {
+      const [tx, ty] = pt(deg, 152);
+      const t = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+      t.setAttribute('x', tx); t.setAttribute('y', ty + 4); t.setAttribute('text-anchor', 'middle');
+      t.setAttribute('fill', '#8b96a3'); t.setAttribute('font-size', '10'); t.setAttribute('font-family', 'JetBrains Mono, monospace');
+      t.textContent = MIN + i / 2; ticks.appendChild(t);
+    }
+  }
+  const arc = document.getElementById('arc'), knob = document.getElementById('knob');
+  const els = {
+    temp: document.getElementById('dialTemp'), mode: document.getElementById('dialMode'), sub: document.getElementById('dialSub'),
+    swap: document.getElementById('heroSwap'), out: document.getElementById('outT'), cfm: document.getElementById('cfm')
+  };
+
+  const SEASON = {
+    cool: { title: 'Pulls out the heat, and the humidity with it.', body: 'Long, low-speed cycles keep air on a cold coil longer, bringing a muggy July house down to 45% humidity so 74° feels like 72°.', r: ['20.5<small>SEER2</small>', '42<small>% load</small>', '54<small>dBA</small>'] },
+    heat: { title: 'Heat pump first. Gas furnace below 25°.', body: 'Dual-fuel systems run the heat pump through most of a Kansas City winter, then hand off to a high-efficiency gas furnace on the coldest nights, so you always heat with the cheaper fuel.', r: ['9.5<small>HSPF2</small>', '71<small>% load</small>', '56<small>dBA</small>'] }
+  };
+  const sBtns = document.querySelectorAll('[data-season]');
+  let season = null;
+  function setSeason(s) {
+    if (s === season) return; season = s;
+    sBtns.forEach(b => b.setAttribute('aria-pressed', String(b.dataset.season === s)));
+    const d = SEASON[s];
+    document.getElementById('sTitle').textContent = d.title;
+    document.getElementById('sBody').textContent = d.body;
+    ['r1', 'r2', 'r3'].forEach((id, i) => document.getElementById(id).innerHTML = d.r[i]);
+  }
+
+  function setTemp(v, fromSeason) {
+    temp = Math.round(Math.min(MAX, Math.max(MIN, v)) * 2) / 2;
+    const f = (temp - MIN) / (MAX - MIN);
+    root.style.setProperty('--t', f.toFixed(3));
+    tShown = f;
+    const deg = START + SWEEP * f;
+    arc.setAttribute('d', f < 0.004 ? '' : arcPath(START, deg));
+    const [kx, ky] = pt(deg); knob.setAttribute('cx', kx); knob.setAttribute('cy', ky);
+    els.temp.textContent = Number.isInteger(temp) ? temp : temp.toFixed(1);
+    dial.setAttribute('aria-valuenow', temp);
+    dial.setAttribute('aria-valuetext', temp + ' degrees Fahrenheit');
+    const mode = temp < 71 ? 'Cooling to' : temp > 73 ? 'Heating to' : 'Holding at';
+    els.mode.textContent = mode;
+    const winter = temp > 72;
+    els.out.textContent = winter ? Math.round(34 - f * 38) + '°' : Math.round(101 - f * 12) + '°';
+    els.sub.textContent = winter ? `Indoor ${(temp - 2.4).toFixed(1)}° · RH ${Math.round(34 + f * 4)}%` : `Indoor ${(temp + 4.8).toFixed(1)}° · RH ${Math.round(52 - f * 6)}%`;
+    els.cfm.textContent = Math.round(900 + Math.abs(f - 0.5) * 1100).toLocaleString();
+    els.swap.textContent = `exactly ${Number.isInteger(temp) ? temp : temp.toFixed(1)}°F.`;
+    if (!fromSeason) setSeason(winter ? 'heat' : 'cool');
+  }
+  setTemp(WINTER ? 74 : 69);
+
+  function fromPointer(e) {
+    const r = dial.getBoundingClientRect();
+    const x = e.clientX - r.left - r.width / 2, y = e.clientY - r.top - r.height / 2;
+    let deg = Math.atan2(y, x) * 180 / Math.PI; if (deg < 0) deg += 360;
+    let rel = deg - START; if (rel < 0) rel += 360;
+    if (rel > SWEEP) rel = rel > SWEEP + (360 - SWEEP) / 2 ? 0 : SWEEP;
+    setTemp(MIN + (rel / SWEEP) * (MAX - MIN));
+  }
+  let dragging = false;
+  dial.addEventListener('pointerdown', e => { dragging = true; dial.setPointerCapture(e.pointerId); fromPointer(e); });
+  dial.addEventListener('pointermove', e => { if (dragging) fromPointer(e); });
+  dial.addEventListener('pointerup', () => dragging = false);
+  dial.addEventListener('pointercancel', () => dragging = false);
+  dial.addEventListener('wheel', e => { e.preventDefault(); setTemp(temp + (e.deltaY < 0 ? .5 : -.5)); }, { passive: false });
+  dial.addEventListener('keydown', e => {
+    const k = { ArrowUp: .5, ArrowRight: .5, ArrowDown: -.5, ArrowLeft: -.5, PageUp: 2, PageDown: -2 }[e.key];
+    if (k) { e.preventDefault(); setTemp(temp + k); }
+    if (e.key === 'Home') { e.preventDefault(); setTemp(MIN); }
+    if (e.key === 'End') { e.preventDefault(); setTemp(MAX); }
+  });
+
+  // Season buttons animate the dial toward a seasonal setpoint
+  let anim;
+  sBtns.forEach(b => b.addEventListener('click', () => {
+    const target = b.dataset.season === 'heat' ? 76 : 68;
+    setSeason(b.dataset.season);
+    cancelAnimationFrame(anim);
+    if (reduce) return setTemp(target, true);
+    const start = temp, t0 = performance.now();
+    const step = now => {
+      const p = Math.min(1, (now - t0) / 900), e = 1 - Math.pow(1 - p, 3);
+      setTemp(start + (target - start) * e, true);
+      if (p < 1) anim = requestAnimationFrame(step);
+    };
+    anim = requestAnimationFrame(step);
+  }));
+
+  /* ---------- Airflow canvas ---------- */
+  const cv = document.getElementById('flow'), cx = cv.getContext('2d');
+  let W, H, parts = [], dpr = Math.min(2, devicePixelRatio || 1), running = true;
+  function size() {
+    W = cv.clientWidth; H = cv.clientHeight; cv.width = W * dpr; cv.height = H * dpr; cx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    const n = Math.round(Math.min(140, W * H / 9000));
+    parts = Array.from({ length: n }, () => ({ x: Math.random() * W, y: Math.random() * H, s: .4 + Math.random() * 1.1, l: 20 + Math.random() * 70, o: Math.random() * Math.PI * 2 }));
+  }
+  size(); addEventListener('resize', size);
+  const lerp = (a, b, t) => Math.round(a + (b - a) * t);
+  function frame(time) {
+    if (!running) return;
+    cx.clearRect(0, 0, W, H);
+    const t = tShown;
+    const col = `${lerp(124, 255, t)},${lerp(198, 139, t)},${lerp(255, 61, t)}`;
+    const rise = (t - 0.5) * 1.6;           // cold air sinks, warm air rises
+    cx.lineCap = 'round';
+    for (const p of parts) {
+      const wob = Math.sin(time / 1400 + p.o + p.x / 220) * 0.7;
+      p.x += p.s * 1.6; p.y += (wob - rise) * p.s * .6;
+      if (p.x - p.l > W) { p.x = -p.l; p.y = Math.random() * H; }
+      if (p.y < -20) p.y = H + 20; if (p.y > H + 20) p.y = -20;
+      const g = cx.createLinearGradient(p.x - p.l, p.y, p.x, p.y);
+      g.addColorStop(0, `rgba(${col},0)`); g.addColorStop(1, `rgba(${col},${.08 + p.s * .14})`);
+      cx.strokeStyle = g; cx.lineWidth = p.s;
+      cx.beginPath(); cx.moveTo(p.x - p.l, p.y + wob * 6); cx.quadraticCurveTo(p.x - p.l / 2, p.y - wob * 8, p.x, p.y); cx.stroke();
+    }
+    requestAnimationFrame(frame);
+  }
+  if (!reduce) {
+    requestAnimationFrame(frame);
+    new IntersectionObserver(([e]) => { const was = running; running = e.isIntersecting; if (running && !was) requestAnimationFrame(frame); }).observe(cv);
+  }
+
+  /* ---------- Play videos only while visible ---------- */
+  const vio = new IntersectionObserver(entries => entries.forEach(e => {
+    const v = e.target;
+    if (e.isIntersecting) { if (v.preload === 'none') v.preload = 'metadata'; const p = v.play(); p && p.catch(() => {}); }
+    else v.pause();
+  }), { rootMargin: '120px' });
+  document.querySelectorAll('video').forEach(v => { v.muted = true; vio.observe(v); });
+
+  /* ---------- Process line + counters ---------- */
+  const proc = document.getElementById('process');
+  new IntersectionObserver(([e], o) => { if (e.isIntersecting) { proc.classList.add('on'); o.disconnect(); } }, { threshold: .4 }).observe(proc);
+  const fmt = n => n.toLocaleString();
+  document.querySelectorAll('.count').forEach(el => {
+    const to = +el.dataset.to;
+    el.textContent = fmt(to); // resting state is the real number
+    if (reduce) return;
+    new IntersectionObserver(([e], o) => {
+      if (!e.isIntersecting) return; o.disconnect();
+      const t0 = performance.now();
+      const step = now => { const p = Math.min(1, (now - t0) / 1400); el.textContent = fmt(Math.round(to * (1 - Math.pow(1 - p, 4)))); if (p < 1) requestAnimationFrame(step); };
+      requestAnimationFrame(step);
+    }, { threshold: .6 }).observe(el);
+  });
+
+  /* ---------- Savings estimator ---------- */
+  const $ = id => document.getElementById(id);
+  const sqft = $('sqft'), rate = $('rate'), hours = $('hours');
+  let oldSeer = 12;
+  const NEW_SEER = 21; // 20 SEER2 ≈ 21 SEER
+  let shown = 0;
+  function fill(r) { r.style.setProperty('--p', ((r.value - r.min) / (r.max - r.min) * 100) + '%'); }
+  function calc() {
+    [sqft, rate, hours].forEach(fill);
+    const btu = +sqft.value * 25, h = +hours.value, price = +rate.value;
+    const kOld = btu * h / (oldSeer * 1000), kNew = btu * h / (NEW_SEER * 1000);
+    const save = (kOld - kNew) * price;
+    $('sqftOut').textContent = fmt(+sqft.value) + ' sq ft';
+    $('rateOut').textContent = '$' + price.toFixed(2) + ' / kWh';
+    $('hoursOut').textContent = fmt(h) + ' h';
+    $('kwhOld').textContent = fmt(Math.round(kOld)) + ' kWh';
+    $('kwhNew').textContent = fmt(Math.round(kNew)) + ' kWh';
+    $('barOld').style.width = '100%';
+    $('barNew').style.width = (kNew / kOld * 100).toFixed(1) + '%';
+    $('tons').textContent = (Math.round(btu / 12000 * 2) / 2).toFixed(1) + ' ton';
+    $('ten').textContent = '$' + fmt(Math.round(save * 10 / 10) * 10);
+    $('co2').textContent = fmt(Math.round((kOld - kNew) * 0.39)) + ' kg';
+    const target = Math.round(save), from = shown, t0 = performance.now();
+    if (reduce) { shown = target; $('save').textContent = fmt(target); return; }
+    const step = now => { const p = Math.min(1, (now - t0) / 500); shown = Math.round(from + (target - from) * (1 - Math.pow(1 - p, 3))); $('save').textContent = fmt(shown); if (p < 1) requestAnimationFrame(step); };
+    requestAnimationFrame(step);
+  }
+  [sqft, rate, hours].forEach(r => r.addEventListener('input', calc));
+  document.querySelectorAll('#age button').forEach(b => b.addEventListener('click', () => {
+    document.querySelectorAll('#age button').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
+    oldSeer = +b.dataset.seer; calc();
+  }));
+  calc();
+
+  /* ---------- Copy buttons ---------- */
+  document.querySelectorAll('[data-copy]').forEach(b => b.addEventListener('click', () => {
+    const el = $(b.dataset.copy), txt = el.textContent;
+    const ok = () => { b.textContent = 'Copied'; setTimeout(() => b.textContent = 'Copy', 1600); };
+    const fallback = () => { const r = document.createRange(); r.selectNodeContents(el); const s = getSelection(); s.removeAllRanges(); s.addRange(r); b.textContent = 'Selected'; setTimeout(() => b.textContent = 'Copy', 1600); };
+    try { navigator.clipboard.writeText(txt).then(ok, fallback); } catch (_) { fallback(); }
+  }));
+
+  /* ---------- Seasonal offer + alert ---------- */
+  if (!WINTER) {
+    $('alertText').textContent = 'Hot days ahead. Book your AC check before the first heat wave.';
+    $('offerEyebrow').textContent = 'Seasonal offer · before the first heat wave';
+    $('offerTitle').textContent = 'AC tune-up & refrigerant check';
+    $('offerBody').textContent = '21-point inspection, coil cleaning, capacitor and contactor test, and a measured temperature split before Kansas City hits 95°.';
+    $('offerWas').textContent = 'Sample price';
+    $('i2').checked = true;
+  }
+
+  /* ---------- ZIP checker ---------- */
+  const AREA = { '640': 'Missouri', '641': 'Missouri', '660': 'Kansas', '661': 'Kansas', '662': 'Kansas' };
+  $('zipForm').addEventListener('submit', e => {
+    e.preventDefault();
+    const z = $('zipIn').value.trim(), out = $('zipOut');
+    if (!/^\d{5}$/.test(z)) { out.textContent = 'Enter a 5-digit ZIP code, like 64113 or 66212.'; return; }
+    const st = AREA[z.slice(0, 3)];
+    if (st) {
+      const eta = 'out to you: call or book below for the next opening';
+      out.innerHTML = '';
+      const b = document.createElement('b'); b.textContent = `Yes, ${z} is in our ${st} service area.`;
+      out.append(b, ` We can get a technician ${eta}.`);
+      $('fzip').value = z;
+    } else {
+      out.textContent = `${z} is outside our usual area. Call (816) 551-9177 and we'll tell you whether we can still help.`;
+    }
+  });
+
+  /* ---------- Form (Netlify Forms on a live site, demo fallback here) ---------- */
+  const form = $('form');
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    const name = $('fname').value.trim(), zip = $('fzip').value.trim(), tel = $('ftel').value.replace(/\D/g, '');
+    let msg = '';
+    if (!name) msg = 'Add your name so the technician knows who to ask for.';
+    else if (!/^\d{5}$/.test(zip)) msg = 'Enter a 5-digit ZIP code so we can check your service area.';
+    else if (tel.length < 10) msg = 'Enter a 10-digit phone number so dispatch can confirm your window.';
+    $('ferr').textContent = msg;
+    if (msg) return;
+    const issue = form.querySelector('input[name="issue"]:checked').value;
+    const summary = `${name.split(' ')[0]}, your request for "${issue.toLowerCase()}" in ${zip} is set for ${$('fwin').value.toLowerCase()}.`;
+    const show = sent => {
+      $('doneTitle').textContent = sent ? 'Request sent.' : 'Request ready.';
+      $('doneText').textContent = sent ? `${summary} We will call ${$('ftel').value} to confirm.` : summary;
+      $('doneFine').textContent = sent ? 'Need help sooner? Call (816) 551-9177, 24/7.' : 'Demo preview: nothing was sent. On the live site this request goes straight to dispatch by email and text.';
+      $('formBody').hidden = true; $('formDone').hidden = false;
+    };
+    if (!document.querySelector('meta[name="form-live"]')) return show(false);
+    fetch('/', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: new URLSearchParams(new FormData(form)).toString() })
+      .then(r => show(r.ok)).catch(() => show(false));
+  });
+  $('again').addEventListener('click', () => { $('formBody').hidden = false; $('formDone').hidden = true; });
+})();
+</script>
