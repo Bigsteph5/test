@@ -4,7 +4,7 @@
 <meta name="description" content="Arctic Air Heating &amp; Cooling: heating and cooling in Gladstone, MO and the Kansas City area.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,300..800&family=JetBrains+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,300..800&family=JetBrains+Mono:wght@400;500&display=swap" media="print" onload="this.media='all'">
 <style>
 /* Layout: the page is a thermostat. One setpoint (--t, 0 = cold, 1 = warm) tints every accent, video and readout below it. */
 :root {
@@ -366,6 +366,21 @@ footer { border-top: 1px solid var(--line); padding-block: 56px 40px; }
 .faq details[open] summary::after { transform: rotate(45deg); }
 .faq details p { color: var(--muted); padding: 0 0 24px; max-width: 72ch; }
 
+/* Readability over the hero video */
+.hero-shade { background:
+  linear-gradient(90deg, rgba(9,12,16,.82) 0%, rgba(9,12,16,.55) 50%, rgba(9,12,16,.15) 100%),
+  linear-gradient(180deg, rgba(9,12,16,.55) 0%, rgba(9,12,16,.2) 35%, rgba(9,12,16,.88) 82%, var(--ink) 100%),
+  radial-gradient(80% 60% at 75% 55%, var(--temp-soft), transparent 70%); }
+.hero-copy .lede { color: #dde3ea; text-shadow: 0 1px 12px rgba(0,0,0,.6); }
+.hero .eyebrow, .hero-meta { text-shadow: 0 1px 8px rgba(0,0,0,.8); }
+@media (max-width: 900px) { .hero-shade { background: linear-gradient(180deg, rgba(9,12,16,.7) 0%, rgba(9,12,16,.72) 60%, var(--ink) 100%); } }
+
+/* Comfortable tap targets */
+.foot a { display: inline-block; padding-block: 6px; }
+.copy-btn { min-height: 36px; padding: 9px 12px; }
+.nav-links a { padding-block: 10px; }
+.alert a, .nav-phone, .brand, a.v { display: inline-block; padding-block: 8px; }
+
 /* Phone call bar */
 .callbar { display: none; }
 @media (max-width: 700px) {
@@ -375,7 +390,7 @@ footer { border-top: 1px solid var(--line); padding-block: 56px 40px; }
   .callbar .btn { flex: 1; justify-content: center; padding: 14px; }
   footer { padding-bottom: 110px; }
 }
-@media (max-width: 700px) { #alert { display: none; } }
+@media (max-width: 700px) { #alert, .rib-x { display: none; } .callbar { justify-content: flex-start; } .callbar .btn-ghost { display: none; } .callbar .btn-primary { flex: 0 1 52%; } }
 .revs.two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 @media (max-width: 900px) { .revs.two { grid-template-columns: 1fr; } }
 .hero .eyebrow { line-height: 1.5; }
@@ -404,14 +419,15 @@ footer { border-top: 1px solid var(--line); padding-block: 56px 40px; }
     "Liberty",
     "Parkville",
     "Riverside",
-    "Kansas City metro"
+    "Kansas City, KS",
+    "Johnson County"
   ]
 }
 </script>
 
 <nav class="nav" id="nav">
-  <div class="alert" style="background:var(--panel);color:var(--muted)">Website preview for Arctic Air Heating &amp; Cooling · not the live site · prices and offers are placeholders</div>
-  <div class="alert" id="alert"><span id="alertText">Cold nights ahead. Book your furnace check before the first hard freeze.</span><a href="tel:+18164361000">Call (816) 436-1000</a></div>
+  <div class="alert" style="background:var(--panel);color:var(--muted)">Preview for Arctic Air Heating &amp; Cooling · not the live site<span class="rib-x"> · prices and offers are placeholders</span></div>
+  <div class="alert" id="alert"><span id="alertText">Cold nights ahead. No-heat calls answered 24/7 across the metro.</span><a href="tel:+18164361000">Call (816) 436-1000</a></div>
   <div class="nav-in">
     <a class="brand" href="#top"><span class="brand-mark"></span>Arctic Air</a>
     <div class="nav-links">
@@ -427,20 +443,20 @@ footer { border-top: 1px solid var(--line); padding-block: 56px 40px; }
 </nav>
 
 <header class="hero" id="top">
-  <div class="hero-video"><video src="../../media/rooftop.mp4" autoplay muted loop playsinline preload="auto"></video></div>
+  <div class="hero-video"><video src="../../media/rooftop.mp4" poster="../../media/rooftop.jpg" autoplay muted loop playsinline preload="auto"></video></div>
   <div class="hero-shade"></div>
   <canvas id="flow" aria-hidden="true"></canvas>
   <div class="wrap hero-grid">
     <div class="hero-copy load">
-      <span class="eyebrow">Lennox Premier Dealer · Family owned — Gladstone &amp; the Northland</span>
+      <span class="eyebrow">Lennox Premier Dealer · Family owned since 1975 — Gladstone &amp; Kansas City</span>
       <h1>Every room at<span class="swap" id="heroSwap">exactly 70°F.</span></h1>
-      <p class="lede">A family-owned and operated heating and cooling contractor on North Oak Trafficway in Gladstone. Repair, replacement and installation for Northland homes, as a Lennox Premier Dealer.</p>
+      <p class="lede">Family owned since 1975, on North Oak Trafficway in Gladstone. A 24/7 live assistance hotline, priority scheduling for seniors and people with medical needs, and expert installation, maintenance and repair across the metro.</p>
       <div class="hero-cta">
         <a class="btn btn-primary" href="#book">Book a diagnostic
           <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a>
         <a class="btn btn-ghost" href="tel:+18164361000">Call (816) 436-1000</a>
       </div>
-      <div class="hero-meta"><span><b>Lennox</b> Premier Dealer</span><span><b>Family</b> owned</span><span>Gladstone, MO</span></div>
+      <div class="hero-meta"><span><b>Since 1975</b> family owned</span><span><b>4.8★</b> from 696 reviews</span><span><b>24/7</b> live hotline</span></div>
     </div>
 
     <div class="stat-card load" aria-label="Interactive thermostat">
@@ -475,8 +491,8 @@ footer { border-top: 1px solid var(--line); padding-block: 56px 40px; }
 
 <div class="ticker" aria-hidden="true">
   <div class="ticker-track">
-    <span>Lennox Premier Dealer <i></i> Furnace repair <i></i> AC repair <i></i> System replacement <i></i> Installation <i></i> Seasonal tune-ups <i></i></span>
-    <span>Lennox Premier Dealer <i></i> Furnace repair <i></i> AC repair <i></i> System replacement <i></i> Installation <i></i> Seasonal tune-ups <i></i></span>
+    <span>Lennox Premier Dealer <i></i> Furnace repair &amp; installation <i></i> AC repair &amp; installation <i></i> Maintenance <i></i> Air flow corrections <i></i> Priority service for seniors <i></i> Financing <i></i> 24/7 live hotline <i></i></span>
+    <span>Lennox Premier Dealer <i></i> Furnace repair &amp; installation <i></i> AC repair &amp; installation <i></i> Maintenance <i></i> Air flow corrections <i></i> Priority service for seniors <i></i> Financing <i></i> 24/7 live hotline <i></i></span>
   </div>
 </div>
 
@@ -544,10 +560,10 @@ footer { border-top: 1px solid var(--line); padding-block: 56px 40px; }
         <ul><li>PM2.5</li><li>CO₂</li><li>RH 40–50%</li></ul>
       </a>
       <a class="svc svc-plain rise" href="#book">
-        <span class="big mono" id="repairClock">Same day</span>
+        <span class="big mono" id="repairClock">24/7</span>
         <span class="svc-tag">Repair · 24/7</span>
-        <h3>When it quits on you.</h3>
-        <p>Call and we'll get you on the schedule as fast as we can. You hear the price before any work starts.</p>
+        <h3>When it quits at 2 a.m.</h3>
+        <p>Call any time, day or night. You hear the price before any work starts.</p>
       </a>
       <a class="svc rise" href="#book">
         <video src="../../media/fans.mp4" muted loop playsinline preload="metadata" data-play></video>
@@ -657,10 +673,10 @@ footer { border-top: 1px solid var(--line); padding-block: 56px 40px; }
   <div class="wrap">
     <div class="proof">
       <figure class="quote rise" style="margin:0">
-        <blockquote>Your best Google reviews go here, word for word, with the customer's first name and neighborhood.</blockquote>
-        <figcaption><b>Placeholder</b>Real reviews are added before this site goes live</figcaption>
+        <blockquote>“Very pleased with the price and installation of a new AC and furnace. Prompt, professional, have used Arctic Air for decades and will continue.”</blockquote>
+        <figcaption><b>Kevin W.</b>Review via Birdeye · AC &amp;amp; furnace install</figcaption>
       </figure>
-      <div class="nums rise"><div><strong>Lennox</strong><span>Premier Dealer</span></div><div><strong>Family</strong><span>owned and operated</span></div><div><strong>N Oak</strong><span>Trafficway, Gladstone</span></div><div><strong>Northland</strong><span>homes served</span></div></div>
+      <div class="nums rise"><div><strong>1975</strong><span>family owned since</span></div><div><strong>4.8★</strong><span>from 696 reviews (Birdeye)</span></div><div><strong>24/7</strong><span>live assistance hotline</span></div><div><strong>Lennox</strong><span>Premier Dealer</span></div></div>
     </div>
 
   </div>
@@ -669,8 +685,8 @@ footer { border-top: 1px solid var(--line); padding-block: 56px 40px; }
 <section id="area" style="padding-top: 0">
   <div class="wrap">
     <div class="sec-head rise">
-      <div><span class="eyebrow">Service area</span><h2>Close to home.</h2></div>
-      <p class="lede">Based in Gladstone, serving the Northland and the greater Kansas City area.</p>
+      <div><span class="eyebrow">Service area</span><h2>Both sides of State Line.</h2></div>
+      <p class="lede">Based in Gladstone, serving the Kansas City metro in Missouri and Kansas.</p>
     </div>
     <div class="area">
       <div class="state rise">
@@ -678,8 +694,8 @@ footer { border-top: 1px solid var(--line); padding-block: 56px 40px; }
         <ul class="towns"><li>Gladstone</li><li>Kansas City North</li><li>North Kansas City</li><li>Liberty</li><li>Parkville</li><li>Riverside</li></ul>
       </div>
       <div class="state rise">
-        <div class="state-h"><b>KC</b><span>Call to confirm</span></div>
-        <ul class="towns"><li>Kansas City metro</li></ul>
+        <div class="state-h"><b>KS</b><span>Call to confirm</span></div>
+        <ul class="towns"><li>Kansas City, KS</li><li>Johnson County</li></ul>
       </div>
       <form class="zip rise" id="zipForm" novalidate>
         <span class="eyebrow">Check your address</span>
@@ -702,7 +718,7 @@ footer { border-top: 1px solid var(--line); padding-block: 56px 40px; }
       <p class="lede">What Kansas City homeowners ask us most before they book.</p>
     </div>
     <div class="faq">
-      <details><summary>How fast can a technician get to me?</summary><p>Call (816) 436-1000 and we'll give you the soonest arrival window we have.</p></details>
+      <details><summary>How fast can a technician get to me?</summary><p>Call (816) 436-1000 and we'll give you the soonest arrival window we have. Emergency service is available 24/7.</p></details>
       <details><summary>Should I repair or replace my system?</summary><p>A quick rule: multiply the system's age by the repair cost. If the result is over $5,000, replacement usually makes more sense. Systems over 15 years old, or AC units that still use R-22 refrigerant, are often better replaced. We give you both prices so you can decide.</p></details>
       <details><summary>Do heat pumps work in a Kansas City winter?</summary><p>Yes. Cold-climate heat pumps keep most of their heating capacity well below freezing. Many Kansas City homes use dual-fuel: the heat pump handles the bulk of the winter, and a gas furnace takes over on the coldest nights, so you always pay the cheaper rate.</p></details>
       <details><summary>Do you pull permits and handle rebates?</summary><p>Yes. We pull the permits your city requires and help with any utility rebate paperwork your new equipment qualifies for.</p></details>
@@ -719,8 +735,8 @@ footer { border-top: 1px solid var(--line); padding-block: 56px 40px; }
       <h2>Tell us what the house is doing.</h2>
       <p class="lede">We call you back to confirm an arrival window. In a hurry? Call (816) 436-1000.</p>
       <div class="contact-lines">
-        <div><span class="k">Call</span><a class="v" id="phone" href="tel:+18164361000" style="text-decoration:none">(816) 436-1000</a><button class="copy-btn" type="button" data-copy="phone">Copy</button></div>
-        <div><span class="k">Hours</span><span class="v" style="font-size:16px">Call for hours</span></div>
+        <div><span class="k">Call 24/7</span><a class="v" id="phone" href="tel:+18164361000" style="text-decoration:none">(816) 436-1000</a><button class="copy-btn" type="button" data-copy="phone">Copy</button></div>
+        <div><span class="k">Hours</span><span class="v" style="font-size:16px">24/7 live assistance hotline</span></div>
       </div>
     </div>
     <form class="card rise" id="form" name="service-request" method="POST" data-netlify="true" netlify-honeypot="company" novalidate>
@@ -1008,7 +1024,7 @@ footer { border-top: 1px solid var(--line); padding-block: 56px 40px; }
 
   /* ---------- Seasonal offer + alert ---------- */
   if (!WINTER) {
-    $('alertText').textContent = 'Hot days ahead. Book your AC check before the first heat wave.';
+    $('alertText').textContent = 'Heat advisory season. No-cooling calls answered 24/7 across the metro.';
     $('offerEyebrow').textContent = 'Seasonal offer · before the first heat wave';
     $('offerTitle').textContent = 'AC tune-up & refrigerant check';
     $('offerBody').textContent = '21-point inspection, coil cleaning, capacitor and contactor test, and a measured temperature split before Kansas City hits 95°.';

@@ -3,7 +3,7 @@
 <meta name="description" content="Heating, cooling and indoor air quality across the Kansas City metro, in Missouri and Kansas. 24/7 repair, dual-fuel heat pumps, furnaces and central air.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,300..800&family=JetBrains+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,300..800&family=JetBrains+Mono:wght@400;500&display=swap" media="print" onload="this.media='all'">
 <style>
 /* Layout: the page is a thermostat. One setpoint (--t, 0 = cold, 1 = warm) tints every accent, video and readout below it. */
 :root {
@@ -365,6 +365,21 @@ footer { border-top: 1px solid var(--line); padding-block: 56px 40px; }
 .faq details[open] summary::after { transform: rotate(45deg); }
 .faq details p { color: var(--muted); padding: 0 0 24px; max-width: 72ch; }
 
+/* Readability over the hero video */
+.hero-shade { background:
+  linear-gradient(90deg, rgba(9,12,16,.82) 0%, rgba(9,12,16,.55) 50%, rgba(9,12,16,.15) 100%),
+  linear-gradient(180deg, rgba(9,12,16,.55) 0%, rgba(9,12,16,.2) 35%, rgba(9,12,16,.88) 82%, var(--ink) 100%),
+  radial-gradient(80% 60% at 75% 55%, var(--temp-soft), transparent 70%); }
+.hero-copy .lede { color: #dde3ea; text-shadow: 0 1px 12px rgba(0,0,0,.6); }
+.hero .eyebrow, .hero-meta { text-shadow: 0 1px 8px rgba(0,0,0,.8); }
+@media (max-width: 900px) { .hero-shade { background: linear-gradient(180deg, rgba(9,12,16,.7) 0%, rgba(9,12,16,.72) 60%, var(--ink) 100%); } }
+
+/* Comfortable tap targets */
+.foot a { display: inline-block; padding-block: 6px; }
+.copy-btn { min-height: 36px; padding: 9px 12px; }
+.nav-links a { padding-block: 10px; }
+.alert a, .nav-phone, .brand, a.v { display: inline-block; padding-block: 8px; }
+
 /* Phone call bar */
 .callbar { display: none; }
 @media (max-width: 700px) {
@@ -406,7 +421,7 @@ footer { border-top: 1px solid var(--line); padding-block: 56px 40px; }
 </nav>
 
 <header class="hero" id="top">
-  <div class="hero-video"><video src="media/rooftop.mp4" autoplay muted loop playsinline preload="auto"></video></div>
+  <div class="hero-video"><video src="media/rooftop.mp4" poster="media/rooftop.jpg" autoplay muted loop playsinline preload="auto"></video></div>
   <div class="hero-shade"></div>
   <canvas id="flow" aria-hidden="true"></canvas>
   <div class="wrap hero-grid">

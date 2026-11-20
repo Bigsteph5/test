@@ -7,16 +7,33 @@ Collected 2026-11-20 from web search, directory listings and each company's own 
 
 | # | Business | Area | Phone | Website today | Why they need you | Demo folder |
 |---|---|---|---|---|---|---|
-| 1 | **Steve's Heating & Cooling** | Riverside, MO (4252 NW Riverside St) | (816) 436-8475 | **None found** | Family-owned since 1979 with a reported 4.9★ from ~517 Google reviews, but no website. Customers searching "furnace repair Northland" find competitors instead. | `steves-heating-cooling` |
-| 2 | **Gunn Heating & Cooling** | KC metro (BuildZoom lists Paola, KS) | (816) 551-9177 ⚠️ | **None found** | 5.0★ from 103 Google reviews and no website. | `gunn-heating-cooling` |
-| 3 | **Arctic Air Heating & Cooling** | Gladstone, MO (6708 N Oak Trafficway) | (816) 436-1000 ⚠️ | **None confirmed** | Lennox Premier Dealer, family owned, no website found. | `arctic-air-gladstone` |
-| 4 | **Comfort Kings Heating and Cooling** | Overland Park, KS | (913) 277-9428 | comfortkings.squarespace.com | Their site lives on a default Squarespace address, has no request form and only ~475 words, and shows two phone numbers. They have 30+ years of history and strong reviews to feature. | `comfort-kings` |
-| 5 | **Cool Heat KC** | Shawnee, KS | (913) 333-0493 | coolheatkc.com (WordPress) | The live site shows leftover text "Marketing 2026-04-17T09:17:16+00:00" in the menu area and a "Facebbok" typo. The browser title is a 120-character keyword string. No request form. Veteran-owned, Mitsubishi Diamond Elite. | `cool-heat-kc` |
+| 1 | **Gunn Heating & Cooling** | KC metro (BuildZoom lists Paola, KS) | (816) 551-9177 | **None found** | Verified Google profile: 5.0★ from 113 reviews, and no website. **Best lead.** | `gunn-heating-cooling` |
+| 2 | **Comfort Kings Heating and Cooling** | Overland Park, KS | (913) 277-9428 | comfortkings.squarespace.com | Their site lives on a default Squarespace address, has no request form and only ~475 words, and shows two phone numbers. They have 30+ years of history and strong reviews to feature. | `comfort-kings` |
+| 3 | **Cool Heat KC** | Shawnee, KS | (913) 333-0493 | coolheatkc.com (WordPress) | The live site shows leftover text "Marketing 2026-04-17T09:17:16+00:00" in the menu area and a "Facebbok" typo. The browser title is a 120-character keyword string. No request form. Veteran-owned, Mitsubishi Diamond Elite. | `cool-heat-kc` |
+| 4 | **Steve's Heating & Cooling** | Riverside, MO (4252 NW Riverside St) | (816) 436-8475 | **stevesheatingkc.com** (WordPress, solid) | ⚠️ Correction: they DO have a decent site: mobile-ready, 20+ service pages, promotions, financing, reviews, 24/7 on-call. No request form on the home page. **Weak lead.** Pitch only as a redesign. | `steves-heating-cooling` |
+| 5 | **Arctic Air Heating & Cooling** | Gladstone, MO (6708 N Oak Trafficway) | (816) 436-1000 (confirmed on their site) | **arcticairkc.com** (WordPress, online booking) | ⚠️ Correction: they DO have a site with an online booking widget, 24/7 hotline and "Family Owned Since 1975". It still says "49 years" (it's now 51), and its stat counters render as "0 %" / "K+" with no numbers in the page source. **Weak lead.** Pitch only as a redesign. (arcticairhc.com is an unrelated Texas company.) | `arctic-air-gladstone` |
 
-⚠️ **Phone conflicts:**
-- Gunn: Google shows (816) 551-9177; BuildZoom shows (816) 557-9177. HomeAdvisor says they don't offer emergency service, so the demo makes no 24/7 claim.
-- Arctic Air: BBB shows (816) 436-1000; another listing shows 1-816-587-4000. Founding year conflicts (1975 vs 2010), so the demo omits it.
-- Steve's: the 517-review count comes from an aggregator (ServiceAgent). Check Google before quoting it. The demo shows "4.9★ on Google" only.
+⚠️ **Notes:**
+- Gunn: BuildZoom shows (816) 557-9177, but the verified Google profile shows (816) 551-9177, so use the Google number. HomeAdvisor says no emergency service, so the demo makes no 24/7 claim.
+- Steve's: the "4.9★ / 517 reviews" figure came from an aggregator and is no longer shown in the demo.
+- Arctic Air: the 4.8★ / 696-review figure is Birdeye's total across sources, and the demo labels it that way.
+
+## Where each demo's reviews come from
+- **Gunn:** 3 reviews copied word for word from the verified Google Business Profile (John James, Kellsi Proctor, Melissa Hatfield).
+- **Steve's:** 3 reviews from stevesheatingkc.com (Michelle M., Harry K., Nancy). The site doesn't label their source.
+- **Arctic Air:** 1 review from Birdeye (Kevin W.). Their Google profile wasn't reachable from here, so add 2 Google reviews yourself if you pitch them.
+- **Comfort Kings / Cool Heat KC:** reviews from their own sites (Comfort Kings labels theirs "via Google").
+
+## Readiness scan (2026-11-20, live URLs)
+| Check | Result |
+|---|---|
+| Lighthouse (phone, Gunn) | Performance **93**, Accessibility **100**, Best practices **100**, SEO 60 (only because previews are deliberately hidden from Google; 100 once launched) |
+| Load speed (phone) | First paint 1.3 s, main content 2.0 s, layout shift 0.004 |
+| Page weight | ~5 MB on phone (was ~29 MB before video compression) |
+| Errors | 0 console errors, 0 broken requests on all 5 sites, desktop and phone |
+| Phone layout | No sideways scroll on any site; call button visible; phone number in header |
+| Request form | Test submission arrived in Netlify (Gunn), then deleted |
+| Known cosmetic | Netlify shows a "Powered by Netlify" badge bottom-right on free sites; the phone call bar was reshaped so it doesn't collide |
 
 ## Live preview links (Netlify, your account)
 | Business | Preview |

@@ -52,8 +52,8 @@ def build(L):
 
     # Preview ribbon (clearly not the business's live site)
     s = rep('<nav class="nav" id="nav">\n',
-            '<nav class="nav" id="nav">\n  <div class="alert" style="background:var(--panel);color:var(--muted)">Website preview for '
-            + esc(name) + ' · not the live site · prices and offers are placeholders</div>\n')
+            '<nav class="nav" id="nav">\n  <div class="alert" style="background:var(--panel);color:var(--muted)">Preview for '
+            + esc(name) + ' · not the live site<span class="rib-x"> · prices and offers are placeholders</span></div>\n')
 
     winter_alert = "Cold nights ahead. No-heat calls answered 24/7 across the metro." if em else "Cold nights ahead. Book your furnace check before the first hard freeze."
     summer_alert = "Heat advisory season. No-cooling calls answered 24/7 across the metro." if em else "Hot days ahead. Book your AC check before the first heat wave."
@@ -157,10 +157,10 @@ def build(L):
             '<div class="wordmark" aria-hidden="true" style="font-size:clamp(40px,10vw,160px)">' + esc(short) + "</div>")
 
     # Taller fixed header (preview ribbon) + long eyebrows need room
-    s = rep("</style>", "@media (max-width: 700px) { #alert { display: none; } }\n.revs.two { grid-template-columns: repeat(2, minmax(0, 1fr)); }\n@media (max-width: 900px) { .revs.two { grid-template-columns: 1fr; } }\n.hero .eyebrow { line-height: 1.5; }\n.hero-grid { padding-top: 210px; }\n@media (max-width: 900px) { .hero-grid { padding-top: 200px; } }\n</style>")
+    s = rep("</style>", "@media (max-width: 700px) { #alert, .rib-x { display: none; } .callbar { justify-content: flex-start; } .callbar .btn-ghost { display: none; } .callbar .btn-primary { flex: 0 1 52%; } }\n.revs.two { grid-template-columns: repeat(2, minmax(0, 1fr)); }\n@media (max-width: 900px) { .revs.two { grid-template-columns: 1fr; } }\n.hero .eyebrow { line-height: 1.5; }\n.hero-grid { padding-top: 210px; }\n@media (max-width: 900px) { .hero-grid { padding-top: 200px; } }\n</style>")
 
     # Media lives one level up so all demos share one copy in the repo
-    s = s.replace('src="media/', 'src="../../media/')
+    s = s.replace('="media/', '="../../media/')
     assert "Kestrel" not in s and "555-0173" not in s, L["slug"]
     return s
 

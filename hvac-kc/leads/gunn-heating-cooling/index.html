@@ -4,7 +4,7 @@
 <meta name="description" content="Gunn Heating &amp; Cooling: heating and cooling in Kansas City, MO and the Kansas City area.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,300..800&family=JetBrains+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,300..800&family=JetBrains+Mono:wght@400;500&display=swap" media="print" onload="this.media='all'">
 <style>
 /* Layout: the page is a thermostat. One setpoint (--t, 0 = cold, 1 = warm) tints every accent, video and readout below it. */
 :root {
@@ -366,6 +366,21 @@ footer { border-top: 1px solid var(--line); padding-block: 56px 40px; }
 .faq details[open] summary::after { transform: rotate(45deg); }
 .faq details p { color: var(--muted); padding: 0 0 24px; max-width: 72ch; }
 
+/* Readability over the hero video */
+.hero-shade { background:
+  linear-gradient(90deg, rgba(9,12,16,.82) 0%, rgba(9,12,16,.55) 50%, rgba(9,12,16,.15) 100%),
+  linear-gradient(180deg, rgba(9,12,16,.55) 0%, rgba(9,12,16,.2) 35%, rgba(9,12,16,.88) 82%, var(--ink) 100%),
+  radial-gradient(80% 60% at 75% 55%, var(--temp-soft), transparent 70%); }
+.hero-copy .lede { color: #dde3ea; text-shadow: 0 1px 12px rgba(0,0,0,.6); }
+.hero .eyebrow, .hero-meta { text-shadow: 0 1px 8px rgba(0,0,0,.8); }
+@media (max-width: 900px) { .hero-shade { background: linear-gradient(180deg, rgba(9,12,16,.7) 0%, rgba(9,12,16,.72) 60%, var(--ink) 100%); } }
+
+/* Comfortable tap targets */
+.foot a { display: inline-block; padding-block: 6px; }
+.copy-btn { min-height: 36px; padding: 9px 12px; }
+.nav-links a { padding-block: 10px; }
+.alert a, .nav-phone, .brand, a.v { display: inline-block; padding-block: 8px; }
+
 /* Phone call bar */
 .callbar { display: none; }
 @media (max-width: 700px) {
@@ -375,7 +390,7 @@ footer { border-top: 1px solid var(--line); padding-block: 56px 40px; }
   .callbar .btn { flex: 1; justify-content: center; padding: 14px; }
   footer { padding-bottom: 110px; }
 }
-@media (max-width: 700px) { #alert { display: none; } }
+@media (max-width: 700px) { #alert, .rib-x { display: none; } .callbar { justify-content: flex-start; } .callbar .btn-ghost { display: none; } .callbar .btn-primary { flex: 0 1 52%; } }
 .revs.two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 @media (max-width: 900px) { .revs.two { grid-template-columns: 1fr; } }
 .hero .eyebrow { line-height: 1.5; }
@@ -405,7 +420,7 @@ footer { border-top: 1px solid var(--line); padding-block: 56px 40px; }
 </script>
 
 <nav class="nav" id="nav">
-  <div class="alert" style="background:var(--panel);color:var(--muted)">Website preview for Gunn Heating &amp; Cooling · not the live site · prices and offers are placeholders</div>
+  <div class="alert" style="background:var(--panel);color:var(--muted)">Preview for Gunn Heating &amp; Cooling · not the live site<span class="rib-x"> · prices and offers are placeholders</span></div>
   <div class="alert" id="alert"><span id="alertText">Cold nights ahead. Book your furnace check before the first hard freeze.</span><a href="tel:+18165519177">Call (816) 551-9177</a></div>
   <div class="nav-in">
     <a class="brand" href="#top"><span class="brand-mark"></span>Gunn</a>
@@ -422,20 +437,20 @@ footer { border-top: 1px solid var(--line); padding-block: 56px 40px; }
 </nav>
 
 <header class="hero" id="top">
-  <div class="hero-video"><video src="../../media/rooftop.mp4" autoplay muted loop playsinline preload="auto"></video></div>
+  <div class="hero-video"><video src="../../media/rooftop.mp4" poster="../../media/rooftop.jpg" autoplay muted loop playsinline preload="auto"></video></div>
   <div class="hero-shade"></div>
   <canvas id="flow" aria-hidden="true"></canvas>
   <div class="wrap hero-grid">
     <div class="hero-copy load">
       <span class="eyebrow">Heating · Cooling — locally owned, serving the Kansas City metro</span>
       <h1>Every room at<span class="swap" id="heroSwap">exactly 70°F.</span></h1>
-      <p class="lede">A locally owned, family-operated heating and cooling company with a 5-star Google rating. Prompt furnace repairs and clean, courteous installs across the Kansas City metro.</p>
+      <p class="lede">A locally owned, family-operated heating and cooling company with a perfect 5-star Google rating. Honest diagnoses, fair prices and no pressure to buy extras.</p>
       <div class="hero-cta">
         <a class="btn btn-primary" href="#book">Book a diagnostic
           <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a>
         <a class="btn btn-ghost" href="tel:+18165519177">Call (816) 551-9177</a>
       </div>
-      <div class="hero-meta"><span><b>5.0★</b> from 103 Google reviews</span><span><b>Family</b> operated</span><span>Locally owned</span></div>
+      <div class="hero-meta"><span><b>5.0★</b> from 113 Google reviews</span><span><b>Family</b> operated</span><span>Locally owned</span></div>
     </div>
 
     <div class="stat-card load" aria-label="Interactive thermostat">
@@ -652,12 +667,12 @@ footer { border-top: 1px solid var(--line); padding-block: 56px 40px; }
   <div class="wrap">
     <div class="proof">
       <figure class="quote rise" style="margin:0">
-        <blockquote>Your best Google reviews go here, word for word, with the customer's first name and neighborhood.</blockquote>
-        <figcaption><b>Placeholder</b>Real reviews are added before this site goes live</figcaption>
+        <blockquote>“Very professional. I called them up for my AC not running, they came out the very next morning. Found what was wrong with it in a timely manner, had it all fixed and ready to go within an hour. No up charges, no pressure to buy additional things, just a fixed AC and ready to go with a great price! 100% recommend them to anyone!”</blockquote>
+        <figcaption><b>John James</b>Google review · AC repair</figcaption>
       </figure>
-      <div class="nums rise"><div><strong>5.0★</strong><span>Google rating</span></div><div><strong>103</strong><span>Google reviews</span></div><div><strong>Family</strong><span>operated</span></div><div><strong>Local</strong><span>owned, metro-wide</span></div></div>
+      <div class="nums rise"><div><strong>5.0★</strong><span>Google rating</span></div><div><strong>113</strong><span>Google reviews</span></div><div><strong>Family</strong><span>operated</span></div><div><strong>Local</strong><span>owned, metro-wide</span></div></div>
     </div>
-
+    <div class="revs two"><article class="rev rise"><div class="stars" aria-hidden="true">★★★★★</div><p>“Honest, reliable &amp; consistent, quality work! Tyler is always so friendly &amp; patient with all my questions and I can always count on Jeremy to be responsive &amp; happy to get the job done! Can’t beat Gunn Heating &amp; Cooling!”</p><footer><b>Kellsi Proctor</b> · Google review</footer></article><article class="rev rise"><div class="stars" aria-hidden="true">★★★★★</div><p>“Gunn installed the whole kit and caboodle! A new heater, air conditioner and hot water tank. The staff could not be any better. When I asked how much a new thermostat would cost they came back the next day and installed one for free!!!!”</p><footer><b>Melissa Hatfield</b> · Google review · Full system install</footer></article></div>
   </div>
 </section>
 

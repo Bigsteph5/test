@@ -4,7 +4,7 @@
 <meta name="description" content="Steve's Heating &amp; Cooling: heating and cooling in Riverside, MO and the Kansas City area.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,300..800&family=JetBrains+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,300..800&family=JetBrains+Mono:wght@400;500&display=swap" media="print" onload="this.media='all'">
 <style>
 /* Layout: the page is a thermostat. One setpoint (--t, 0 = cold, 1 = warm) tints every accent, video and readout below it. */
 :root {
@@ -366,6 +366,21 @@ footer { border-top: 1px solid var(--line); padding-block: 56px 40px; }
 .faq details[open] summary::after { transform: rotate(45deg); }
 .faq details p { color: var(--muted); padding: 0 0 24px; max-width: 72ch; }
 
+/* Readability over the hero video */
+.hero-shade { background:
+  linear-gradient(90deg, rgba(9,12,16,.82) 0%, rgba(9,12,16,.55) 50%, rgba(9,12,16,.15) 100%),
+  linear-gradient(180deg, rgba(9,12,16,.55) 0%, rgba(9,12,16,.2) 35%, rgba(9,12,16,.88) 82%, var(--ink) 100%),
+  radial-gradient(80% 60% at 75% 55%, var(--temp-soft), transparent 70%); }
+.hero-copy .lede { color: #dde3ea; text-shadow: 0 1px 12px rgba(0,0,0,.6); }
+.hero .eyebrow, .hero-meta { text-shadow: 0 1px 8px rgba(0,0,0,.8); }
+@media (max-width: 900px) { .hero-shade { background: linear-gradient(180deg, rgba(9,12,16,.7) 0%, rgba(9,12,16,.72) 60%, var(--ink) 100%); } }
+
+/* Comfortable tap targets */
+.foot a { display: inline-block; padding-block: 6px; }
+.copy-btn { min-height: 36px; padding: 9px 12px; }
+.nav-links a { padding-block: 10px; }
+.alert a, .nav-phone, .brand, a.v { display: inline-block; padding-block: 8px; }
+
 /* Phone call bar */
 .callbar { display: none; }
 @media (max-width: 700px) {
@@ -375,7 +390,7 @@ footer { border-top: 1px solid var(--line); padding-block: 56px 40px; }
   .callbar .btn { flex: 1; justify-content: center; padding: 14px; }
   footer { padding-bottom: 110px; }
 }
-@media (max-width: 700px) { #alert { display: none; } }
+@media (max-width: 700px) { #alert, .rib-x { display: none; } .callbar { justify-content: flex-start; } .callbar .btn-ghost { display: none; } .callbar .btn-primary { flex: 0 1 52%; } }
 .revs.two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 @media (max-width: 900px) { .revs.two { grid-template-columns: 1fr; } }
 .hero .eyebrow { line-height: 1.5; }
@@ -401,16 +416,24 @@ footer { border-top: 1px solid var(--line); padding-block: 56px 40px; }
     "Riverside",
     "Parkville",
     "Gladstone",
-    "North Kansas City",
-    "Kansas City North",
-    "Kansas City metro"
+    "Liberty",
+    "Kansas City",
+    "Weatherby Lake",
+    "Platte Woods",
+    "Lake Waukomis",
+    "Claycomo",
+    "Northmoor",
+    "Overland Park",
+    "Lenexa",
+    "Shawnee",
+    "Prairie Village"
   ]
 }
 </script>
 
 <nav class="nav" id="nav">
-  <div class="alert" style="background:var(--panel);color:var(--muted)">Website preview for Steve's Heating &amp; Cooling · not the live site · prices and offers are placeholders</div>
-  <div class="alert" id="alert"><span id="alertText">Cold nights ahead. Book your furnace check before the first hard freeze.</span><a href="tel:+18164368475">Call (816) 436-8475</a></div>
+  <div class="alert" style="background:var(--panel);color:var(--muted)">Preview for Steve's Heating &amp; Cooling · not the live site<span class="rib-x"> · prices and offers are placeholders</span></div>
+  <div class="alert" id="alert"><span id="alertText">Cold nights ahead. No-heat calls answered 24/7 across the metro.</span><a href="tel:+18164368475">Call (816) 436-8475</a></div>
   <div class="nav-in">
     <a class="brand" href="#top"><span class="brand-mark"></span>Steve's</a>
     <div class="nav-links">
@@ -426,20 +449,20 @@ footer { border-top: 1px solid var(--line); padding-block: 56px 40px; }
 </nav>
 
 <header class="hero" id="top">
-  <div class="hero-video"><video src="../../media/rooftop.mp4" autoplay muted loop playsinline preload="auto"></video></div>
+  <div class="hero-video"><video src="../../media/rooftop.mp4" poster="../../media/rooftop.jpg" autoplay muted loop playsinline preload="auto"></video></div>
   <div class="hero-shade"></div>
   <canvas id="flow" aria-hidden="true"></canvas>
   <div class="wrap hero-grid">
     <div class="hero-copy load">
-      <span class="eyebrow">Heating · Cooling · Maintenance — Riverside &amp; the Northland since 1979</span>
+      <span class="eyebrow">Heating · Cooling · Air quality — Riverside &amp; the Northland since 1979</span>
       <h1>Every room at<span class="swap" id="heroSwap">exactly 70°F.</span></h1>
-      <p class="lede">A family-owned HVAC company serving Kansas City from Riverside since 1979. We service and install quality equipment, all makes and models, with maintenance plans that keep your system running.</p>
+      <p class="lede">Locally owned and serving Kansas City since 1979. Furnace and air conditioning installation, service and repair, with fair pricing and techs customers ask for by name. Not part of a national home services company.</p>
       <div class="hero-cta">
         <a class="btn btn-primary" href="#book">Book a diagnostic
           <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a>
         <a class="btn btn-ghost" href="tel:+18164368475">Call (816) 436-8475</a>
       </div>
-      <div class="hero-meta"><span><b>4.9★</b> on Google</span><span><b>Since 1979</b></span><span><b>Family</b> owned</span></div>
+      <div class="hero-meta"><span><b>Since 1979</b> locally owned</span><span><b>24/7</b> emergency on-call</span><span><b>American Standard</b> dealer</span></div>
     </div>
 
     <div class="stat-card load" aria-label="Interactive thermostat">
@@ -474,8 +497,8 @@ footer { border-top: 1px solid var(--line); padding-block: 56px 40px; }
 
 <div class="ticker" aria-hidden="true">
   <div class="ticker-track">
-    <span>Furnace repair <i></i> AC repair <i></i> New system installs <i></i> All makes &amp; models <i></i> Maintenance plans <i></i> System check-ups <i></i></span>
-    <span>Furnace repair <i></i> AC repair <i></i> New system installs <i></i> All makes &amp; models <i></i> Maintenance plans <i></i> System check-ups <i></i></span>
+    <span>AC repair &amp; installation <i></i> Furnace repair &amp; installation <i></i> Heat pumps <i></i> Ductless mini-splits <i></i> Humidifiers &amp; dehumidifiers <i></i> Duct cleaning <i></i> Indoor air quality <i></i> Financing on approved credit <i></i></span>
+    <span>AC repair &amp; installation <i></i> Furnace repair &amp; installation <i></i> Heat pumps <i></i> Ductless mini-splits <i></i> Humidifiers &amp; dehumidifiers <i></i> Duct cleaning <i></i> Indoor air quality <i></i> Financing on approved credit <i></i></span>
   </div>
 </div>
 
@@ -543,17 +566,17 @@ footer { border-top: 1px solid var(--line); padding-block: 56px 40px; }
         <ul><li>PM2.5</li><li>CO₂</li><li>RH 40–50%</li></ul>
       </a>
       <a class="svc svc-plain rise" href="#book">
-        <span class="big mono" id="repairClock">Same day</span>
+        <span class="big mono" id="repairClock">24/7</span>
         <span class="svc-tag">Repair · 24/7</span>
-        <h3>When it quits on you.</h3>
-        <p>Call and we'll get you on the schedule as fast as we can. You hear the price before any work starts.</p>
+        <h3>When it quits at 2 a.m.</h3>
+        <p>Call any time, day or night. You hear the price before any work starts.</p>
       </a>
       <a class="svc rise" href="#book">
         <video src="../../media/fans.mp4" muted loop playsinline preload="metadata" data-play></video>
-        <span class="svc-tag">Maintenance</span>
-        <h3>Maintenance plans &amp; check-ups</h3>
-        <p>Seasonal check-ups that catch small problems early and keep your equipment running longer.</p>
-        <ul><li>Spring AC</li><li>Fall furnace</li><li>All makes</li></ul>
+        <span class="svc-tag">Air quality</span>
+        <h3>Cleaner, healthier air</h3>
+        <p>Duct cleaning, air cleaners and purifiers, humidifiers and dehumidifiers for Kansas City homes.</p>
+        <ul><li>Duct cleaning</li><li>Purifiers</li><li>Humidifiers</li></ul>
       </a>
     </div>
   </div>
@@ -656,29 +679,29 @@ footer { border-top: 1px solid var(--line); padding-block: 56px 40px; }
   <div class="wrap">
     <div class="proof">
       <figure class="quote rise" style="margin:0">
-        <blockquote>Your best Google reviews go here, word for word, with the customer's first name and neighborhood.</blockquote>
-        <figcaption><b>Placeholder</b>Real reviews are added before this site goes live</figcaption>
+        <blockquote>“The technician got here within an hour of calling. He was very nice and replaced the capacitor within and hour. It was a great experience and I will definitely use them again!!!”</blockquote>
+        <figcaption><b>Michelle M.</b>Customer review</figcaption>
       </figure>
-      <div class="nums rise"><div><strong>1979</strong><span>serving Kansas City since</span></div><div><strong>4.9★</strong><span>Google rating</span></div><div><strong>Family</strong><span>owned and operated</span></div><div><strong>All makes</strong><span>serviced and installed</span></div></div>
+      <div class="nums rise"><div><strong>1979</strong><span>serving Kansas City since</span></div><div><strong>45+</strong><span>years locally owned</span></div><div><strong>24/7</strong><span>emergency on-call service</span></div><div><strong>Free</strong><span>quotes on new equipment</span></div></div>
     </div>
-
+    <div class="revs two"><article class="rev rise"><div class="stars" aria-hidden="true">★★★★★</div><p>“This was a general service call. My HVAC stopped cooling and the condenser and evaporator coils froze. The technician showed up 15 minutes early and solved the issue within 2-3 minutes. Excellent mannerisms for customer service.”</p><footer><b>Harry K.</b> · AC service</footer></article><article class="rev rise"><div class="stars" aria-hidden="true">★★★★★</div><p>“Fast, effective, very polite. Worth every penny.”</p><footer><b>Nancy</b> · Customer review</footer></article></div>
   </div>
 </section>
 
 <section id="area" style="padding-top: 0">
   <div class="wrap">
     <div class="sec-head rise">
-      <div><span class="eyebrow">Service area</span><h2>Close to home.</h2></div>
-      <p class="lede">Based in Riverside, serving the Northland and the greater Kansas City area.</p>
+      <div><span class="eyebrow">Service area</span><h2>Both sides of State Line.</h2></div>
+      <p class="lede">Based in Riverside, serving the Northland and beyond on both sides of State Line.</p>
     </div>
     <div class="area">
       <div class="state rise">
         <div class="state-h"><b>MO</b><span>Platte · Clay</span></div>
-        <ul class="towns"><li>Riverside</li><li>Parkville</li><li>Gladstone</li><li>North Kansas City</li><li>Kansas City North</li></ul>
+        <ul class="towns"><li>Riverside</li><li>Parkville</li><li>Gladstone</li><li>Liberty</li><li>Kansas City</li><li>Weatherby Lake</li><li>Platte Woods</li><li>Lake Waukomis</li><li>Claycomo</li><li>Northmoor</li></ul>
       </div>
       <div class="state rise">
-        <div class="state-h"><b>KC</b><span>Call to confirm</span></div>
-        <ul class="towns"><li>Kansas City metro</li></ul>
+        <div class="state-h"><b>KS</b><span>Johnson County</span></div>
+        <ul class="towns"><li>Overland Park</li><li>Lenexa</li><li>Shawnee</li><li>Prairie Village</li></ul>
       </div>
       <form class="zip rise" id="zipForm" novalidate>
         <span class="eyebrow">Check your address</span>
@@ -701,7 +724,7 @@ footer { border-top: 1px solid var(--line); padding-block: 56px 40px; }
       <p class="lede">What Kansas City homeowners ask us most before they book.</p>
     </div>
     <div class="faq">
-      <details><summary>How fast can a technician get to me?</summary><p>Call (816) 436-8475 and we'll give you the soonest arrival window we have.</p></details>
+      <details><summary>How fast can a technician get to me?</summary><p>Call (816) 436-8475 and we'll give you the soonest arrival window we have. Emergency service is available 24/7.</p></details>
       <details><summary>Should I repair or replace my system?</summary><p>A quick rule: multiply the system's age by the repair cost. If the result is over $5,000, replacement usually makes more sense. Systems over 15 years old, or AC units that still use R-22 refrigerant, are often better replaced. We give you both prices so you can decide.</p></details>
       <details><summary>Do heat pumps work in a Kansas City winter?</summary><p>Yes. Cold-climate heat pumps keep most of their heating capacity well below freezing. Many Kansas City homes use dual-fuel: the heat pump handles the bulk of the winter, and a gas furnace takes over on the coldest nights, so you always pay the cheaper rate.</p></details>
       <details><summary>Do you pull permits and handle rebates?</summary><p>Yes. We pull the permits your city requires and help with any utility rebate paperwork your new equipment qualifies for.</p></details>
@@ -718,8 +741,8 @@ footer { border-top: 1px solid var(--line); padding-block: 56px 40px; }
       <h2>Tell us what the house is doing.</h2>
       <p class="lede">We call you back to confirm an arrival window. In a hurry? Call (816) 436-8475.</p>
       <div class="contact-lines">
-        <div><span class="k">Call</span><a class="v" id="phone" href="tel:+18164368475" style="text-decoration:none">(816) 436-8475</a><button class="copy-btn" type="button" data-copy="phone">Copy</button></div>
-        <div><span class="k">Hours</span><span class="v" style="font-size:16px">Call for hours</span></div>
+        <div><span class="k">Call 24/7</span><a class="v" id="phone" href="tel:+18164368475" style="text-decoration:none">(816) 436-8475</a><button class="copy-btn" type="button" data-copy="phone">Copy</button></div>
+        <div><span class="k">Hours</span><span class="v" style="font-size:16px">Mon–Fri 8–8 · Sat 8–5 · Sun 12–5 · 24/7 emergency on-call</span></div>
       </div>
     </div>
     <form class="card rise" id="form" name="service-request" method="POST" data-netlify="true" netlify-honeypot="company" novalidate>
@@ -769,7 +792,7 @@ footer { border-top: 1px solid var(--line); padding-block: 56px 40px; }
       </div>
       <div><h4>Services</h4><ul><li><a href="#services">Heat pumps</a></li><li><a href="#services">Furnaces</a></li><li><a href="#services">Central air</a></li><li><a href="#services">Indoor air quality</a></li><li><a href="#services">Commercial</a></li></ul></div>
       <div><h4>Company</h4><ul><li><a href="#plans">Comfort Club</a></li><li><a href="#savings">Savings estimator</a></li><li><a href="#faq">FAQ</a></li><li><a href="#book">Financing</a></li></ul></div>
-      <div><h4>Service area</h4><ul><li>Riverside</li><li>Parkville</li><li>Gladstone</li><li>North Kansas City</li><li>Kansas City North</li><li>Kansas City metro</li></ul></div>
+      <div><h4>Service area</h4><ul><li>Riverside</li><li>Parkville</li><li>Gladstone</li><li>Liberty</li><li>Kansas City</li><li>Weatherby Lake</li></ul></div>
     </div>
     <div class="wordmark" aria-hidden="true" style="font-size:clamp(40px,10vw,160px)">Steve's</div>
     <div class="legal"><span>© 2026 Steve's Heating &amp; Cooling</span><span>Website preview · not the live site · Video: Mixkit</span></div>
@@ -1007,7 +1030,7 @@ footer { border-top: 1px solid var(--line); padding-block: 56px 40px; }
 
   /* ---------- Seasonal offer + alert ---------- */
   if (!WINTER) {
-    $('alertText').textContent = 'Hot days ahead. Book your AC check before the first heat wave.';
+    $('alertText').textContent = 'Heat advisory season. No-cooling calls answered 24/7 across the metro.';
     $('offerEyebrow').textContent = 'Seasonal offer · before the first heat wave';
     $('offerTitle').textContent = 'AC tune-up & refrigerant check';
     $('offerBody').textContent = '21-point inspection, coil cleaning, capacitor and contactor test, and a measured temperature split before Kansas City hits 95°.';
