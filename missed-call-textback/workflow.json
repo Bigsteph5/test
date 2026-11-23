@@ -1,0 +1,583 @@
+{
+  "name": "Missed-Call Text-Back",
+  "nodes": [
+    {
+      "id": "webhook",
+      "name": "Twilio Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        300
+      ],
+      "webhookId": "missed-call-textback",
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "acme-hvac/twilio",
+        "responseMode": "responseNode",
+        "options": {}
+      }
+    },
+    {
+      "id": "config",
+      "name": "Client Config",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        220,
+        300
+      ],
+      "parameters": {
+        "jsCode": "// ===== CLIENT SETTINGS: edit this block for each client =====\nconst CONFIG = {\n  // 'forward-unanswered': the client keeps their current number and their carrier\n  //   forwards unanswered calls to the Twilio number (most common).\n  // 'twilio-number': the client publishes the Twilio number; it rings ownerPhone first.\n  mode: 'forward-unanswered',\n  businessName: 'Acme Heating & Cooling',\n  ownerPhone: '+18165550100',   // owner's cell for alerts (E.164 format)\n  ringSeconds: 15,              // 'twilio-number' mode only: keep BELOW the owner's voicemail pickup\n  timezone: 'America/Chicago',\n  openDays: [1, 2, 3, 4, 5, 6], // 0 = Sunday ... 6 = Saturday\n  openHour: 7,                  // 7 = 7:00 a.m.\n  closeHour: 19,                // 19 = 7:00 p.m.\n  bookingLink: '',              // optional, e.g. https://cal.com/acme-hvac\n  dedupeHours: 12,              // don't re-text the same caller within this window\n  alertOwner: true,             // text the owner about each missed call and reply\n  greeting: \"Sorry we missed your call. We'll text you right now.\",\n  msgOpen: \"Hi, this is {business}. Sorry we missed your call, we're with a customer. What can we help with? Reply here and we'll get right back to you.{booking}\",\n  msgClosed: \"Hi, this is {business}. Sorry we missed your call, we're closed right now. Reply with what you need and we'll call you first thing.{booking}\",\n};\n// ===== END CLIENT SETTINGS =====\n\nconst req = $input.first().json;\nconst body = req.body || {};\nconst query = req.query || {};\nlet event = query.event || 'unknown';\nlet dialStatus = body.DialCallStatus || '';\n// In forward-unanswered mode every call reaching Twilio was already missed.\nif (event === 'voice' && CONFIG.mode === 'forward-unanswered') {\n  event = 'call-status';\n  dialStatus = 'no-answer';\n}\nreturn [{\n  json: {\n    event,\n    webhookUrl: req.webhookUrl || '',\n    From: body.From || '',\n    To: body.To || '',\n    Body: body.Body || '',\n    DialCallStatus: dialStatus,\n    CallSid: body.CallSid || '',\n    config: CONFIG,\n  },\n}];"
+      }
+    },
+    {
+      "id": "route",
+      "name": "Route Event",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3,
+      "position": [
+        440,
+        300
+      ],
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict"
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.event }}",
+                    "rightValue": "voice",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "voice"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict"
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.event }}",
+                    "rightValue": "call-status",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "call-status"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict"
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.event }}",
+                    "rightValue": "sms",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "sms"
+            }
+          ]
+        },
+        "options": {
+          "fallbackOutput": "extra"
+        }
+      }
+    },
+    {
+      "id": "voice",
+      "name": "Build Forward TwiML",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        680,
+        60
+      ],
+      "parameters": {
+        "jsCode": "const d = $input.first().json;\nconst c = d.config;\n// Absolute URL Twilio calls after the forwarded call ends (falls back to relative).\nconst base = (d.webhookUrl || '').split('?')[0];\nconst action = (base ? base : '') + '?event=call-status';\nconst twiml = '<?xml version=\"1.0\" encoding=\"UTF-8\"?>' +\n  '<Response><Dial timeout=\"' + Number(c.ringSeconds) + '\" action=\"' + action + '\" method=\"POST\">' +\n  '<Number>' + c.ownerPhone + '</Number></Dial></Response>';\nreturn [{ json: { ...d, twiml } }];"
+      }
+    },
+    {
+      "id": "voice-resp",
+      "name": "Respond: Forward Call",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        900,
+        60
+      ],
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "={{ $json.twiml }}",
+        "options": {
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Content-Type",
+                "value": "text/xml"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "decide",
+      "name": "Missed Call?",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        680,
+        300
+      ],
+      "parameters": {
+        "jsCode": "const d = $input.first().json;\nconst c = d.config;\nconst from = d.From;\n\n// Twilio's placeholder numbers for hidden/blocked caller ID\nconst HIDDEN = ['+266696687', '+7378742833', '+2562533', '+8656696', '+86282452253'];\nconst MISSED = ['no-answer', 'busy', 'failed', 'canceled'];\n\nconst missed = MISSED.includes(d.DialCallStatus);\nconst validCaller = /^\\+[1-9]\\d{7,14}$/.test(from) && !HIDDEN.includes(from) && from !== c.ownerPhone;\n\n// Dedupe: persisted per workflow (only in production executions, not manual tests)\nconst store = $getWorkflowStaticData('global');\nstore.lastTexted = store.lastTexted || {};\nconst now = Date.now();\nconst windowMs = c.dedupeHours * 3600 * 1000;\nfor (const [num, t] of Object.entries(store.lastTexted)) {\n  if (now - t > windowMs) delete store.lastTexted[num];\n}\nconst recentlyTexted = Boolean(store.lastTexted[from]);\nconst shouldText = missed && validCaller && !recentlyTexted;\nif (shouldText) store.lastTexted[from] = now;\n\n// Business hours in the client's timezone\nconst parts = new Intl.DateTimeFormat('en-US', {\n  timeZone: c.timezone, weekday: 'short', hour: 'numeric', hourCycle: 'h23',\n}).formatToParts(new Date());\nconst dayName = parts.find(p => p.type === 'weekday').value;\nconst hour = Number(parts.find(p => p.type === 'hour').value);\nconst day = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].indexOf(dayName);\nconst isOpen = c.openDays.includes(day) && hour >= c.openHour && hour < c.closeHour;\n\nconst booking = c.bookingLink ? ' Or book a time here: ' + c.bookingLink : '';\nconst smsToCaller = (isOpen ? c.msgOpen : c.msgClosed)\n  .replace('{business}', c.businessName)\n  .replace('{booking}', booking);\nconst ownerAlert = 'Missed call from ' + from + '. Auto-text sent. Call them back.';\n\nconst esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');\nconst twiml = '<?xml version=\"1.0\" encoding=\"UTF-8\"?><Response>' +\n  (missed ? '<Say>' + esc(c.greeting) + '</Say><Hangup/>' : '') +\n  '</Response>';\n\nreturn [{ json: {\n  ...d, missed, validCaller, recentlyTexted, isOpen, shouldText,\n  alertOwner: shouldText && c.alertOwner,\n  smsToCaller, ownerAlert, twiml,\n} }];"
+      }
+    },
+    {
+      "id": "decide-resp",
+      "name": "Respond: Goodbye",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        900,
+        300
+      ],
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "={{ $json.twiml }}",
+        "options": {
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Content-Type",
+                "value": "text/xml"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "if-text",
+      "name": "Should Text?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        1120,
+        300
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "if-text-c",
+              "leftValue": "={{ $json.shouldText }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "sms-caller",
+      "name": "Text the Caller",
+      "type": "n8n-nodes-base.twilio",
+      "typeVersion": 1,
+      "position": [
+        1340,
+        240
+      ],
+      "parameters": {
+        "from": "={{ $json.To }}",
+        "to": "={{ $json.From }}",
+        "message": "={{ $json.smsToCaller }}",
+        "options": {}
+      },
+      "credentials": {
+        "twilioApi": {
+          "id": "REPLACE_ME",
+          "name": "Twilio account"
+        }
+      }
+    },
+    {
+      "id": "if-alert",
+      "name": "Alert Owner?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        1560,
+        240
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "if-alert-c",
+              "leftValue": "={{ $('Missed Call?').item.json.alertOwner }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "sms-owner",
+      "name": "Alert the Owner",
+      "type": "n8n-nodes-base.twilio",
+      "typeVersion": 1,
+      "position": [
+        1780,
+        220
+      ],
+      "parameters": {
+        "from": "={{ $('Missed Call?').item.json.To }}",
+        "to": "={{ $('Missed Call?').item.json.config.ownerPhone }}",
+        "message": "={{ $('Missed Call?').item.json.ownerAlert }}",
+        "options": {}
+      },
+      "credentials": {
+        "twilioApi": {
+          "id": "REPLACE_ME",
+          "name": "Twilio account"
+        }
+      }
+    },
+    {
+      "id": "sms",
+      "name": "Lead Reply",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        680,
+        540
+      ],
+      "parameters": {
+        "jsCode": "const d = $input.first().json;\nconst c = d.config;\nconst fromOwner = d.From === c.ownerPhone;\nconst forward = c.alertOwner && !fromOwner && d.Body.trim() !== '';\nreturn [{ json: {\n  ...d,\n  forward,\n  forwardText: 'Lead ' + d.From + ' replied: ' + d.Body,\n  twiml: '<?xml version=\"1.0\" encoding=\"UTF-8\"?><Response></Response>',\n} }];"
+      }
+    },
+    {
+      "id": "sms-resp",
+      "name": "Respond: SMS OK",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        900,
+        540
+      ],
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "={{ $json.twiml }}",
+        "options": {
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Content-Type",
+                "value": "text/xml"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "if-fwd",
+      "name": "Forward Reply?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        1120,
+        540
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "if-fwd-c",
+              "leftValue": "={{ $json.forward }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "sms-fwd",
+      "name": "Forward Reply to Owner",
+      "type": "n8n-nodes-base.twilio",
+      "typeVersion": 1,
+      "position": [
+        1340,
+        520
+      ],
+      "parameters": {
+        "from": "={{ $json.To }}",
+        "to": "={{ $json.config.ownerPhone }}",
+        "message": "={{ $json.forwardText }}",
+        "options": {}
+      },
+      "credentials": {
+        "twilioApi": {
+          "id": "REPLACE_ME",
+          "name": "Twilio account"
+        }
+      }
+    },
+    {
+      "id": "unknown-resp",
+      "name": "Respond: Empty",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        680,
+        760
+      ],
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Response></Response>",
+        "options": {
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Content-Type",
+                "value": "text/xml"
+              }
+            ]
+          }
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Twilio Webhook": {
+      "main": [
+        [
+          {
+            "node": "Client Config",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Client Config": {
+      "main": [
+        [
+          {
+            "node": "Route Event",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Route Event": {
+      "main": [
+        [
+          {
+            "node": "Build Forward TwiML",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Missed Call?",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Lead Reply",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Respond: Empty",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Forward TwiML": {
+      "main": [
+        [
+          {
+            "node": "Respond: Forward Call",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Missed Call?": {
+      "main": [
+        [
+          {
+            "node": "Respond: Goodbye",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Respond: Goodbye": {
+      "main": [
+        [
+          {
+            "node": "Should Text?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Should Text?": {
+      "main": [
+        [
+          {
+            "node": "Text the Caller",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    },
+    "Text the Caller": {
+      "main": [
+        [
+          {
+            "node": "Alert Owner?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Alert Owner?": {
+      "main": [
+        [
+          {
+            "node": "Alert the Owner",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    },
+    "Lead Reply": {
+      "main": [
+        [
+          {
+            "node": "Respond: SMS OK",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Respond: SMS OK": {
+      "main": [
+        [
+          {
+            "node": "Forward Reply?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Forward Reply?": {
+      "main": [
+        [
+          {
+            "node": "Forward Reply to Owner",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "pinData": {},
+  "active": false
+}
