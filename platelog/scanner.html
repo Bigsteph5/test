@@ -1,0 +1,537 @@
+<title>PlateLog Scanner</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+/* Layout: one narrow work column, like a tech's clipboard. Scan, then confirm, then the equipment log. */
+:root {
+  --bg: #EEF1F3;
+  --surface: #FFFFFF;
+  --sunk: #E3E8EB;
+  --ink: #152027;
+  --muted: #56646C;
+  --line: #CDD5DA;
+  --copper: #A9501F;
+  --copper-soft: #F6E6DC;
+  --on-copper: #FFFFFF;
+  --ok: #1E7149;
+  --ok-soft: #DDF1E6;
+  --warn: #8F5A00;
+  --warn-soft: #FBEFD5;
+  --bad: #B02A1E;
+  --bad-soft: #FBE3E0;
+  --display: "Barlow Condensed", "Arial Narrow", system-ui, sans-serif;
+  --body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0E1418; --surface: #161F25; --sunk: #1E2930; --ink: #E4EBEF; --muted: #93A2AB; --line: #2B3840;
+    --copper: #E58350; --copper-soft: #3A2419; --on-copper: #1A0E07;
+    --ok: #57C793; --ok-soft: #12301F; --warn: #F0B53A; --warn-soft: #33270C; --bad: #F2796D; --bad-soft: #3A1714;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0E1418; --surface: #161F25; --sunk: #1E2930; --ink: #E4EBEF; --muted: #93A2AB; --line: #2B3840;
+  --copper: #E58350; --copper-soft: #3A2419; --on-copper: #1A0E07;
+  --ok: #57C793; --ok-soft: #12301F; --warn: #F0B53A; --warn-soft: #33270C; --bad: #F2796D; --bad-soft: #3A1714;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body {
+  background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 15px; line-height: 1.5;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 20px 48px;
+}
+.wrap { max-width: 680px; margin: 0 auto; display: grid; gap: 28px; }
+h1, h2, h3 { font-family: var(--display); font-weight: 700; letter-spacing: 0.01em; margin: 0; text-wrap: balance; }
+h1 { font-size: 2.1rem; line-height: 1; }
+h2 { font-size: 1.45rem; line-height: 1.1; }
+p { margin: 0; }
+.eyebrow { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--copper); }
+.lede { color: var(--muted); max-width: 56ch; }
+header { display: grid; gap: 8px; }
+
+.panel { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 18px; display: grid; gap: 16px; }
+.section-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+.step { font-family: var(--mono); font-size: 0.75rem; color: var(--muted); }
+
+.plate-frame { background: var(--sunk); border-radius: 8px; padding: 10px; display: grid; place-items: center; }
+.plate-frame img, .plate-frame canvas { width: 100%; max-width: 100%; height: auto; border-radius: 4px; display: block; }
+.plate-caption { font-size: 0.82rem; color: var(--muted); }
+
+.actions { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+button, .filebtn {
+  font: 600 0.95rem/1 var(--body); border-radius: 8px; padding: 12px 16px; cursor: pointer; border: 1px solid var(--line);
+  background: var(--surface); color: var(--ink); min-height: 44px; display: inline-flex; align-items: center; gap: 8px;
+}
+button.primary, .filebtn.primary { background: var(--copper); border-color: var(--copper); color: var(--on-copper); }
+button:disabled { opacity: 0.55; cursor: default; }
+button:focus-visible, .filebtn:focus-within, input:focus-visible, select:focus-visible, textarea:focus-visible {
+  outline: 3px solid var(--copper); outline-offset: 2px;
+}
+button.link { background: none; border: none; padding: 6px 2px; min-height: 0; color: var(--copper); font-weight: 600; }
+.filebtn input { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
+.filebtn { position: relative; font-family: var(--body); font-size: 0.95rem; letter-spacing: 0; text-transform: none; }
+
+.status { font-size: 0.9rem; padding: 10px 12px; border-radius: 8px; background: var(--sunk); color: var(--ink); }
+.status.err { background: var(--bad-soft); color: var(--bad); }
+.status.okay { background: var(--ok-soft); color: var(--ok); }
+.spinner { width: 14px; height: 14px; border: 2px solid var(--line); border-top-color: var(--copper); border-radius: 50%; display: inline-block; vertical-align: -2px; margin-right: 8px; animation: spin 0.8s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .spinner { animation: none; } }
+
+.fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 14px; }
+.field { display: grid; gap: 4px; min-width: 0; }
+.field.full { grid-column: 1 / -1; }
+label { font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+input, select, textarea {
+  font: 400 0.98rem/1.3 var(--body); color: var(--ink); background: var(--bg); border: 1px solid var(--line);
+  border-radius: 6px; padding: 10px; width: 100%; min-width: 0;
+}
+input.mono { font-family: var(--mono); letter-spacing: 0.02em; }
+input::placeholder, textarea::placeholder { color: var(--muted); opacity: 0.6; }
+textarea { resize: vertical; min-height: 60px; }
+.hint { font-size: 0.78rem; color: var(--muted); }
+.confidence { font-family: var(--mono); font-size: 0.72rem; padding: 3px 8px; border-radius: 99px; }
+.confidence.high { background: var(--ok-soft); color: var(--ok); }
+.confidence.medium { background: var(--warn-soft); color: var(--warn); }
+.confidence.low { background: var(--bad-soft); color: var(--bad); }
+.divider { height: 1px; background: var(--line); }
+
+.derived { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.derived div { background: var(--sunk); border-radius: 8px; padding: 10px 12px; min-width: 0; }
+.derived strong { display: block; font-family: var(--display); font-size: 1.15rem; font-weight: 600; }
+.derived span { font-size: 0.75rem; color: var(--muted); }
+
+.log { display: grid; gap: 10px; }
+.unit { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; display: grid; gap: 8px; }
+.unit-top { display: flex; justify-content: space-between; gap: 10px; align-items: flex-start; flex-wrap: wrap; }
+.unit-title { font-weight: 600; }
+.unit-meta { font-size: 0.85rem; color: var(--muted); }
+.unit-ids { font-family: var(--mono); font-size: 0.82rem; display: flex; gap: 6px 16px; flex-wrap: wrap; overflow-wrap: anywhere; }
+.chips { display: flex; gap: 6px; flex-wrap: wrap; }
+.chip { font-size: 0.78rem; font-weight: 600; padding: 4px 10px; border-radius: 99px; background: var(--sunk); color: var(--ink); font-variant-numeric: tabular-nums; }
+.chip.ok { background: var(--ok-soft); color: var(--ok); }
+.chip.warn { background: var(--warn-soft); color: var(--warn); }
+.chip.bad { background: var(--bad-soft); color: var(--bad); }
+.unit-actions { display: flex; gap: 14px; flex-wrap: wrap; }
+.empty { border: 1px dashed var(--line); border-radius: 10px; padding: 22px; text-align: center; color: var(--muted); }
+.summary { display: flex; gap: 8px; flex-wrap: wrap; }
+footer { font-size: 0.8rem; color: var(--muted); }
+
+@media (max-width: 520px) {
+  .fields { grid-template-columns: minmax(0, 1fr); }
+  .derived { grid-template-columns: minmax(0, 1fr); }
+  h1 { font-size: 1.8rem; }
+}
+</style>
+
+<div class="wrap">
+  <header>
+    <span class="eyebrow">PlateLog · demo</span>
+    <h1>Snap the data plate. Get the install record.</h1>
+    <p class="lede">Take a photo of the unit's rating plate. PlateLog reads the model, serial and manufacture date, then tracks the warranty registration deadline and the next tune-up.</p>
+  </header>
+
+  <section class="panel" aria-labelledby="scan-h">
+    <div class="section-head">
+      <h2 id="scan-h">1. Scan a plate</h2>
+      <span class="step">photo → fields</span>
+    </div>
+    <div class="plate-frame">
+      <canvas id="sampleCanvas" width="960" height="600" aria-label="Sample data plate for a fictional Northfield Air heat pump"></canvas>
+      <img id="photoPreview" alt="Your data plate photo" hidden>
+    </div>
+    <p class="plate-caption" id="plateCaption">Sample plate from a fictional brand. Use it to see how a scan works, or take a photo of a real unit.</p>
+    <div class="actions">
+      <label class="filebtn primary" id="photoBtn" for="photoInput">
+        <span>Take or choose a photo</span>
+        <input type="file" id="photoInput" accept="image/jpeg,image/png,image/webp" capture="environment">
+      </label>
+      <button type="button" id="sampleBtn" disabled>Read the sample plate</button>
+      <button type="button" id="stopBtn" hidden>Stop</button>
+    </div>
+    <div class="status" id="scanStatus" hidden></div>
+  </section>
+
+  <section class="panel" aria-labelledby="confirm-h">
+    <div class="section-head">
+      <h2 id="confirm-h">2. Confirm the install</h2>
+      <span class="confidence" id="confBadge" hidden></span>
+    </div>
+    <p class="hint" id="confirmHint">Check every field against the plate before saving. Fix anything the scan got wrong.</p>
+    <form id="unitForm" class="fields" autocomplete="off">
+      <div class="field"><label for="f-customer">Customer</label><input id="f-customer" placeholder="Jane Doe"></div>
+      <div class="field"><label for="f-address">Address</label><input id="f-address" placeholder="123 Main St, Olathe"></div>
+      <div class="field"><label for="f-install">Install date</label><input id="f-install" type="date"></div>
+      <div class="field"><label for="f-window">Registration window</label>
+        <select id="f-window">
+          <option value="60">60 days</option>
+          <option value="90">90 days</option>
+          <option value="30">30 days</option>
+        </select>
+      </div>
+      <div class="divider field full"></div>
+      <div class="field"><label for="f-brand">Brand</label><input id="f-brand"></div>
+      <div class="field"><label for="f-type">Equipment type</label>
+        <select id="f-type">
+          <option value="">Select…</option>
+          <option>Air conditioner</option>
+          <option>Heat pump</option>
+          <option>Gas furnace</option>
+          <option>Air handler</option>
+          <option>Evaporator coil</option>
+          <option>Package unit</option>
+          <option>Mini-split</option>
+          <option>Boiler</option>
+          <option>Water heater</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div class="field"><label for="f-model">Model no.</label><input id="f-model" class="mono" spellcheck="false"></div>
+      <div class="field"><label for="f-serial">Serial no.</label><input id="f-serial" class="mono" spellcheck="false"></div>
+      <div class="field"><label for="f-mfg">Manufactured (YYYY-MM)</label><input id="f-mfg" class="mono" placeholder="2024-09"></div>
+      <div class="field"><label for="f-capacity">Capacity</label><input id="f-capacity" placeholder="3 ton"></div>
+      <div class="field"><label for="f-refrigerant">Refrigerant</label><input id="f-refrigerant" class="mono"></div>
+      <div class="field"><label for="f-charge">Factory charge</label><input id="f-charge" class="mono"></div>
+      <div class="field"><label for="f-voltage">Electrical</label><input id="f-voltage" class="mono"></div>
+      <div class="field"><label for="f-mca">MCA / max fuse</label><input id="f-mca" class="mono"></div>
+      <div class="field full"><label for="f-notes">Notes</label><textarea id="f-notes"></textarea></div>
+    </form>
+    <div class="derived" aria-live="polite">
+      <div><strong id="d-deadline">—</strong><span>Register warranty by</span></div>
+      <div><strong id="d-tuneup">—</strong><span>First tune-up due</span></div>
+      <div><strong id="d-age">—</strong><span>Equipment age</span></div>
+    </div>
+    <p class="hint">Registration windows vary by manufacturer and are often 60 or 90 days from install. Check the brand's current terms.</p>
+    <div class="actions">
+      <button type="button" class="primary" id="saveBtn">Save to equipment log</button>
+      <button type="button" id="clearBtn">Clear form</button>
+    </div>
+    <div class="status" id="saveStatus" hidden></div>
+  </section>
+
+  <section aria-labelledby="log-h" class="log">
+    <div class="section-head">
+      <h2 id="log-h">3. Equipment log</h2>
+      <div class="summary" id="summary"></div>
+    </div>
+    <div id="logList" class="log">
+      <div class="empty" id="logEmpty">Saved installs appear here with their registration deadline and next tune-up. Scan a plate and save it to add the first one.</div>
+    </div>
+  </section>
+
+  <footer>Prototype. Scans use Claude on your account. Saved installs are kept with this page.</footer>
+</div>
+
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+  const MS_DAY = 86400000;
+  const fieldIds = ['customer','address','install','window','brand','type','model','serial','mfg','capacity','refrigerant','charge','voltage','mca','notes'];
+  let sample = null, db = null, imagesOk = false, ctl = null, units = [];
+  let pendingDelete = null;
+
+  // ---------- Sample plate (fictional brand) ----------
+  function drawSamplePlate() {
+    const c = $('sampleCanvas'), g = c.getContext('2d');
+    const W = c.width, H = c.height;
+    const grad = g.createLinearGradient(0, 0, W, H);
+    grad.addColorStop(0, '#d9dee1'); grad.addColorStop(0.45, '#c3c9cd'); grad.addColorStop(1, '#d4d9dc');
+    g.fillStyle = grad; g.fillRect(0, 0, W, H);
+    for (let y = 0; y < H; y += 3) { g.fillStyle = `rgba(255,255,255,${0.04 + (y % 7) * 0.006})`; g.fillRect(0, y, W, 1); }
+    g.strokeStyle = '#7d868c'; g.lineWidth = 4; g.strokeRect(14, 14, W - 28, H - 28);
+    for (const [x, y] of [[40, 40], [W - 40, 40], [40, H - 40], [W - 40, H - 40]]) {
+      g.beginPath(); g.arc(x, y, 11, 0, Math.PI * 2); g.fillStyle = '#9aa2a7'; g.fill(); g.strokeStyle = '#6b7378'; g.lineWidth = 2; g.stroke();
+    }
+    g.fillStyle = '#1d2a33'; g.fillRect(14, 70, W - 28, 74);
+    g.fillStyle = '#ffffff'; g.font = 'bold 40px Arial, sans-serif'; g.fillText('NORTHFIELD AIR', 64, 120);
+    g.font = '22px Arial, sans-serif'; g.fillText('SPLIT SYSTEM HEAT PUMP · OUTDOOR UNIT', 430, 118);
+    const rows = [
+      ['MODEL NO.', 'NHP4036A1'], ['SERIAL NO.', '2409E12345'], ['MFD. DATE', '09/2024'],
+      ['REFRIGERANT', 'R-454B   FACTORY CHARGE 7 LB 4 OZ'], ['VOLTS / PH / HZ', '208/230 - 1 - 60'],
+      ['MIN. CIRCUIT AMPS', '21.0      MAX FUSE/BKR 35 A'], ['DESIGN PRESSURE', 'HIGH 600 PSIG   LOW 300 PSIG'],
+    ];
+    let y = 196;
+    for (const [k, v] of rows) {
+      g.fillStyle = '#3a454c'; g.font = 'bold 21px Arial, sans-serif'; g.fillText(k, 64, y);
+      g.fillStyle = '#111a20'; g.font = '30px "Courier New", monospace'; g.fillText(v, 330, y);
+      g.strokeStyle = 'rgba(60,70,76,0.35)'; g.lineWidth = 1; g.beginPath(); g.moveTo(64, y + 14); g.lineTo(W - 64, y + 14); g.stroke();
+      y += 52;
+    }
+    g.fillStyle = '#3a454c'; g.font = '16px Arial, sans-serif';
+    g.fillText('A2L REFRIGERANT · MILDLY FLAMMABLE · SEE INSTALLATION MANUAL', 64, H - 46);
+  }
+
+  // ---------- Dates ----------
+  const todayISO = () => { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; };
+  const parseISO = (s) => { const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(s || ''); return m ? new Date(+m[1], +m[2]-1, +m[3]) : null; };
+  const fmt = (d) => d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+  const startOfToday = () => { const d = new Date(); d.setHours(0,0,0,0); return d; };
+
+  function deadline(installISO, days) {
+    const d = parseISO(installISO); if (!d) return null;
+    return new Date(d.getFullYear(), d.getMonth(), d.getDate() + Number(days || 60));
+  }
+  function seasonOf(type) {
+    const t = (type || '').toLowerCase();
+    if (/heat pump|mini-split|package/.test(t)) return 'both';
+    if (/air conditioner|evaporator/.test(t)) return 'spring';
+    if (/furnace|boiler/.test(t)) return 'fall';
+    return 'both';
+  }
+  function firstTuneup(installISO, type) {
+    const d = parseISO(installISO); if (!d) return null;
+    const season = seasonOf(type);
+    const cands = [];
+    for (let y = d.getFullYear(); y <= d.getFullYear() + 1; y++) {
+      if (season !== 'fall') cands.push(new Date(y, 3, 1));   // Apr 1: cooling check
+      if (season !== 'spring') cands.push(new Date(y, 9, 1)); // Oct 1: heating check
+    }
+    const after = new Date(d.getTime() + 30 * MS_DAY);
+    return cands.filter(c => c >= after).sort((a, b) => a - b)[0] || null;
+  }
+  function ageText(mfg) {
+    const m = /^(\d{4})-(\d{2})$/.exec(mfg || ''); if (!m) return null;
+    const months = (new Date().getFullYear() - +m[1]) * 12 + (new Date().getMonth() + 1 - +m[2]);
+    if (months < 0) return null;
+    if (months < 12) return 'Under 1 yr';
+    const y = Math.floor(months / 12); return y + (y === 1 ? ' yr' : ' yrs');
+  }
+
+  // ---------- Form ----------
+  const val = (k) => $('f-' + k).value.trim();
+  function setVal(k, v) {
+    const el = $('f-' + k);
+    if (el.tagName === 'SELECT' && v) {
+      const match = [...el.options].find(o => o.value.toLowerCase() === String(v).toLowerCase());
+      el.value = match ? match.value : 'Other';
+    } else el.value = v == null ? '' : String(v);
+  }
+  function updateDerived() {
+    const dl = deadline(val('install'), val('window'));
+    $('d-deadline').textContent = dl ? fmt(dl) : '—';
+    const tu = firstTuneup(val('install'), val('type'));
+    $('d-tuneup').textContent = tu ? fmt(tu) : '—';
+    $('d-age').textContent = ageText(val('mfg')) || '—';
+  }
+  function clearForm() {
+    for (const k of fieldIds) setVal(k, '');
+    $('f-install').value = todayISO(); $('f-window').value = '60'; $('f-type').value = '';
+    $('confBadge').hidden = true; updateDerived();
+  }
+  function show(el, text, kind) {
+    el.hidden = false; el.className = 'status' + (kind ? ' ' + kind : ''); el.textContent = text;
+  }
+  function showBusy(el, text) {
+    el.hidden = false; el.className = 'status'; el.textContent = '';
+    const s = document.createElement('span'); s.className = 'spinner'; s.setAttribute('aria-hidden', 'true');
+    el.append(s, document.createTextNode(text));
+  }
+
+  // ---------- Reading a plate with Claude ----------
+  const PROMPT = `You are reading the rating plate (data plate) of a piece of residential HVAC equipment from a photo.
+Extract what is printed. Rules:
+- Copy model and serial numbers exactly, character for character. Watch for 0 vs O, 1 vs I, 5 vs S, 8 vs B. If any character is unreadable, return null for that field and say which one in "notes". Never guess.
+- manufacture_date: "YYYY-MM". Use a date printed on the plate if there is one. Only decode it from the serial number if you are confident of that brand's serial format; otherwise null.
+- manufacture_date_basis: "printed", "decoded from serial", or "unknown".
+- equipment_type: exactly one of "Air conditioner", "Heat pump", "Gas furnace", "Air handler", "Evaporator coil", "Package unit", "Mini-split", "Boiler", "Water heater", "Other".
+- capacity: nominal tons and/or BTU/h if printed or clearly implied by the model number (e.g. "3 ton (36,000 BTU/h)"), else null.
+- If the photo is not an equipment data plate, set is_data_plate to false and leave the other fields null.
+Reply with only this JSON object:
+{"is_data_plate": true, "brand": "", "equipment_type": "", "model": "", "serial": "", "manufacture_date": "", "manufacture_date_basis": "", "capacity": "", "refrigerant": "", "factory_charge": "", "electrical": "", "mca_max_fuse": "", "confidence": "high|medium|low", "notes": ""}`;
+
+  const ERR = {
+    not_granted: 'Reading photos needs permission to use Claude. You can still type the fields in by hand.',
+    sampling_disabled: 'Claude isn\'t available on this account. You can still type the fields in by hand.',
+    images_unavailable: 'This view can\'t send photos to Claude. You can still type the fields in by hand.',
+    image_rejected: 'That file couldn\'t be read. Try a JPEG or PNG photo under 20 MB.',
+    rate_limited: 'Too many scans just now. Wait a minute and try again.',
+    session_expired: 'Your Claude session expired. Sign in again, then retry.',
+    invalid_json: 'The scan came back in an unexpected format. Try again, or retake the photo closer and straighter.',
+    refused: 'Claude couldn\'t read this image. Try a clearer photo of the plate.',
+    empty_completion: 'Nothing came back from the scan. Try a clearer photo.',
+  };
+
+  async function readPlate(blob) {
+    if (!sample) { show($('scanStatus'), 'Scanning isn\'t available in this view. Type the fields in by hand.', 'err'); return; }
+    ctl = new AbortController();
+    $('sampleBtn').disabled = true; $('stopBtn').hidden = false;
+    showBusy($('scanStatus'), 'Reading the plate… this usually takes 10–30 seconds.');
+    try {
+      const r = await sample.json(PROMPT, { images: blob, signal: ctl.signal });
+      if (!r || typeof r !== 'object') throw { code: 'invalid_json' };
+      if (r.is_data_plate === false) { show($('scanStatus'), 'That doesn\'t look like an equipment data plate. Try another photo.', 'err'); return; }
+      const s = (v) => (v == null ? '' : String(v));
+      setVal('brand', s(r.brand)); setVal('type', s(r.equipment_type)); setVal('model', s(r.model)); setVal('serial', s(r.serial));
+      setVal('mfg', /^\d{4}-\d{2}$/.test(s(r.manufacture_date)) ? r.manufacture_date : '');
+      setVal('capacity', s(r.capacity)); setVal('refrigerant', s(r.refrigerant)); setVal('charge', s(r.factory_charge));
+      setVal('voltage', s(r.electrical)); setVal('mca', s(r.mca_max_fuse));
+      const basis = s(r.manufacture_date_basis);
+      const noteParts = [s(r.notes), basis && basis !== 'unknown' ? 'Manufacture date ' + basis + '.' : ''].filter(Boolean);
+      setVal('notes', noteParts.join(' '));
+      const conf = ['high', 'medium', 'low'].includes(r.confidence) ? r.confidence : 'medium';
+      const b = $('confBadge'); b.hidden = false; b.className = 'confidence ' + conf; b.textContent = conf + ' confidence';
+      updateDerived();
+      show($('scanStatus'), 'Plate read. Check the fields in step 2, then save.', 'okay');
+      $('confirm-h').scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' });
+    } catch (e) {
+      if (e && e.code === 'cancelled') { show($('scanStatus'), 'Scan stopped.'); return; }
+      const code = e && e.code;
+      show($('scanStatus'), ERR[code] || 'The scan didn\'t finish. Check your connection and try again.', 'err');
+      if (code === 'not_granted' || code === 'sampling_disabled' || code === 'images_unavailable') disableScanning();
+    } finally {
+      $('sampleBtn').disabled = !sample || !imagesOk; $('stopBtn').hidden = true; ctl = null;
+    }
+  }
+  function disableScanning() {
+    $('sampleBtn').disabled = true; $('photoBtn').hidden = true;
+  }
+
+  $('stopBtn').addEventListener('click', () => ctl && ctl.abort());
+  $('sampleBtn').addEventListener('click', () => {
+    $('photoPreview').hidden = true; $('sampleCanvas').hidden = false;
+    $('plateCaption').textContent = 'Sample plate from a fictional brand.';
+    $('sampleCanvas').toBlob((blob) => blob && readPlate(blob), 'image/png');
+  });
+  let previewUrl = null;
+  $('photoInput').addEventListener('change', (ev) => {
+    const file = ev.target.files && ev.target.files[0]; if (!file) return;
+    if (previewUrl) URL.revokeObjectURL(previewUrl);
+    previewUrl = URL.createObjectURL(file);
+    const img = $('photoPreview'); img.src = previewUrl; img.hidden = false; $('sampleCanvas').hidden = true;
+    $('plateCaption').textContent = 'Your photo. Fill the frame with the plate and avoid glare for the best read.';
+    readPlate(file);
+    ev.target.value = '';
+  });
+
+  // ---------- Equipment log (db) ----------
+  function renderLog() {
+    const list = $('logList');
+    list.replaceChildren();
+    const summary = $('summary'); summary.replaceChildren();
+    if (!units.length) {
+      const e = document.createElement('div'); e.className = 'empty';
+      e.textContent = db ? 'Saved installs appear here with their registration deadline and next tune-up. Scan a plate and save it to add the first one.'
+                         : 'The equipment log isn\'t available in this view. Scans still work; copy the fields elsewhere.';
+      list.append(e); return;
+    }
+    const today = startOfToday();
+    let overdue = 0, dueSoon = 0;
+    for (const u of units) {
+      const d = u.data;
+      const card = document.createElement('article'); card.className = 'unit';
+      const top = document.createElement('div'); top.className = 'unit-top';
+      const left = document.createElement('div');
+      const t = document.createElement('div'); t.className = 'unit-title';
+      t.textContent = [d.brand, d.type, d.capacity].filter(Boolean).join(' · ') || 'Unit';
+      const meta = document.createElement('div'); meta.className = 'unit-meta';
+      meta.textContent = [d.customer, d.address].filter(Boolean).join(', ') || 'No customer entered';
+      left.append(t, meta);
+
+      const chips = document.createElement('div'); chips.className = 'chips';
+      const dl = deadline(d.installDate, d.windowDays);
+      const chip = document.createElement('span'); chip.className = 'chip';
+      if (d.registered) { chip.classList.add('ok'); chip.textContent = 'Registered'; }
+      else if (dl) {
+        const days = Math.round((dl - today) / MS_DAY);
+        if (days < 0) { chip.classList.add('bad'); chip.textContent = `Registration overdue ${-days}d`; overdue++; }
+        else if (days <= 14) { chip.classList.add('warn'); chip.textContent = `Register in ${days}d`; dueSoon++; }
+        else { chip.textContent = `Register by ${fmt(dl)}`; }
+      } else chip.textContent = 'No install date';
+      chips.append(chip);
+      const tu = firstTuneup(d.installDate, d.type);
+      if (tu) { const c2 = document.createElement('span'); c2.className = 'chip'; c2.textContent = 'Tune-up ' + tu.toLocaleDateString('en-US', { month: 'short', year: 'numeric' }); chips.append(c2); }
+      top.append(left, chips);
+
+      const ids = document.createElement('div'); ids.className = 'unit-ids';
+      for (const [k, v] of [['M/N', d.model], ['S/N', d.serial], ['MFD', d.mfg], ['Installed', d.installDate]]) {
+        if (!v) continue; const s = document.createElement('span'); s.textContent = k + ' ' + v; ids.append(s);
+      }
+
+      const acts = document.createElement('div'); acts.className = 'unit-actions';
+      const reg = document.createElement('button'); reg.type = 'button'; reg.className = 'link';
+      reg.textContent = d.registered ? 'Mark not registered' : 'Mark registered';
+      reg.addEventListener('click', () => toggleRegistered(u.id, !d.registered, reg));
+      const del = document.createElement('button'); del.type = 'button'; del.className = 'link';
+      del.textContent = pendingDelete === u.id ? 'Tap again to delete' : 'Delete';
+      del.addEventListener('click', () => deleteUnit(u.id));
+      acts.append(reg, del);
+
+      card.append(top, ids, acts);
+      list.append(card);
+    }
+    const mk = (cls, text) => { const s = document.createElement('span'); s.className = 'chip ' + cls; s.textContent = text; summary.append(s); };
+    mk('', units.length + (units.length === 1 ? ' unit' : ' units'));
+    if (overdue) mk('bad', overdue + ' overdue');
+    if (dueSoon) mk('warn', dueSoon + ' due soon');
+  }
+
+  async function toggleRegistered(id, value, btn) {
+    if (!db) return; btn.disabled = true;
+    try { await db.collection('units').doc(id).update({ registered: value }); }
+    catch (e) { show($('saveStatus'), 'Couldn\'t update that unit. You may only have view access to this page.', 'err'); btn.disabled = false; }
+  }
+  async function deleteUnit(id) {
+    if (!db) return;
+    if (pendingDelete !== id) { pendingDelete = id; renderLog(); setTimeout(() => { if (pendingDelete === id) { pendingDelete = null; renderLog(); } }, 4000); return; }
+    pendingDelete = null;
+    try { await db.collection('units').doc(id).delete(); }
+    catch (e) { show($('saveStatus'), 'Couldn\'t delete that unit. You may only have view access to this page.', 'err'); renderLog(); }
+  }
+
+  $('saveBtn').addEventListener('click', async () => {
+    if (!val('model') && !val('serial')) { show($('saveStatus'), 'Add at least a model or serial number before saving.', 'err'); return; }
+    if (!db) { show($('saveStatus'), 'Saving isn\'t available in this view.', 'err'); return; }
+    $('saveBtn').disabled = true;
+    const doc = {
+      customer: val('customer'), address: val('address'), installDate: val('install'), windowDays: Number(val('window')) || 60,
+      brand: val('brand'), type: val('type'), model: val('model'), serial: val('serial'), mfg: val('mfg'),
+      capacity: val('capacity'), refrigerant: val('refrigerant'), charge: val('charge'), voltage: val('voltage'),
+      mca: val('mca'), notes: val('notes'), registered: false, createdAt: Date.now(),
+    };
+    try {
+      await db.collection('units').add(doc);
+      show($('saveStatus'), 'Saved to the equipment log.', 'okay');
+      clearForm();
+      $('log-h').scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' });
+    } catch (e) {
+      show($('saveStatus'), 'Couldn\'t save. You may only have view access to this page.', 'err');
+    } finally { $('saveBtn').disabled = false; }
+  });
+  $('clearBtn').addEventListener('click', () => { clearForm(); $('saveStatus').hidden = true; });
+  for (const k of ['install', 'window', 'type', 'mfg']) $('f-' + k).addEventListener('input', updateDerived);
+
+  // ---------- Boot ----------
+  drawSamplePlate();
+  clearForm();
+
+  (async () => {
+    try { sample = await claude.use('sample'); } catch { sample = null; }
+    if (sample) {
+      const lim = await sample.limits().catch(() => null);
+      imagesOk = !!(lim && lim.images);
+    }
+    if (!sample || !imagesOk) {
+      disableScanning();
+      show($('scanStatus'), 'Photo scanning isn\'t available in this view. You can still enter installs by hand.', 'err');
+    } else { $('sampleBtn').disabled = false; }
+  })();
+
+  (async () => {
+    try { db = await claude.use('db'); } catch { db = null; }
+    if (!db) { renderLog(); $('saveBtn').disabled = true; return; }
+    const timer = setTimeout(() => { if (!units.length) renderLog(); }, 10000);
+    db.collection('units').orderBy('createdAt', 'desc').onSnapshot((snap) => {
+      clearTimeout(timer);
+      units = snap.docs.map(d => ({ id: d.id, data: d.data() || {} }));
+      renderLog();
+    }, () => { clearTimeout(timer); show($('saveStatus'), 'Couldn\'t load the equipment log. Reload the page to try again.', 'err'); });
+  })();
+})();
+</script>
